@@ -190,33 +190,20 @@ class CreateButtonWidget extends StatelessWidget {
     return SizedBox(
         width: 150,
         height: 62,
-        child: GestureDetector(
-            onTap: () {
-              print('Button pressed');
-            },
-            child: Stack(children: <Widget>[
-              Positioned(
-                  top: 0,
-                  left: 0,
-                  child: Container(
-                      width: 150,
-                      height: 62,
-                      decoration: BoxDecoration(
-                        borderRadius: MyStyles.roundBox16,
-                        boxShadow: [
-                          MyStyles.boxShadowBasic,
-                        ],
-                        color: MyColors.secondary,
-                        border: MyStyles.borderAll1,
-                      ))),
-              Center(
-                child: Text(
-                  text,
-                  textAlign: TextAlign.center,
-                  style: MyStyles.magic24,
-                ),
-              ),
-            ])));
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: MyStyles.roundBox8,
+            boxShadow: [MyStyles.boxShadowBasic],
+            color: MyColors.secondary,
+            border: MyStyles.borderAll1,
+          ),
+          child: OutlinedButton(
+            onPressed: () {},
+            style: MyStyles.createButtonStyle,
+            child: Text(text, style: MyStyles.magic24.copyWith(color: Colors.black),),
+          ),
+        )
+      );
   }
 }
 

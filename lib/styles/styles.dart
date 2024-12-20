@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hocus_focus/styles/colors.dart';
 
 class MyStyles {
 
@@ -43,6 +44,14 @@ class MyStyles {
     color: Color.fromRGBO(0, 0, 0, 0.25),
     offset: Offset(0, 4),
     blurRadius: 4
+  );
+
+  static ButtonStyle createButtonStyle = ElevatedButton.styleFrom(
+    backgroundColor: MyColors.secondary,
+    textStyle: magic24.copyWith(color: Colors.black),
+    shape: RoundedRectangleBorder(
+      borderRadius: roundBox8,
+    ),
   );
 
 }
