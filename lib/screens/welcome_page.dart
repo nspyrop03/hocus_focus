@@ -9,7 +9,9 @@ class WelcomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            NameinputfullboxWidget(),
+            NameInputFullBoxWidget(),
+            SizedBox(height: 20),
+            ChangeAppearanceWidget(name: 'Wand:', maxSelections: 3,),
           ],
         ),
       )

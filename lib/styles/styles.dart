@@ -36,5 +36,4 @@ class MyStyles {
     blurRadius: 4
   );
 
-
 }
