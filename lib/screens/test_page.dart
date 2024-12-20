@@ -9,7 +9,14 @@ class TestPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           TopBarWidget(),
-          Expanded(child: Text("Test Page")),
+          Expanded(
+              child: Column(
+            children: [
+              Text("Test Page"),
+              //LevelBarWidget(level: 42, exp: 300),
+              //CoinsWidget(coins: 100000),
+            ],
+          )),
         ],
       ),
     );
