@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/widgets/bar_widgets.dart';
+import 'package:hocus_focus/widgets/home_widgets.dart';
 
 class TestPage extends StatelessWidget {
   @override
@@ -16,6 +17,7 @@ class TestPage extends StatelessWidget {
               //LevelBarWidget(level: 42, exp: 300),
               //CoinsWidget(coins: 100000),
               //NavBarButton(iconPath: "assets/images/nav_icons/ShopIcon.svg", width: 24, height: 22),
+              SpotifyDropdownWidget(),
             ],
           )),
         ],
