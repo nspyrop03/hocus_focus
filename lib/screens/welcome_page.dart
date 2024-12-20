@@ -9,9 +9,26 @@ class WelcomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            NameInputFullBoxWidget(),
+            SafeArea(
+              child: PageTitleWidget(title: "Welcome to HocusFocus")
+            ),
             SizedBox(height: 20),
-            ChangeAppearanceWidget(name: 'Wand:', maxSelections: 3,),
+            NameInputFullBoxWidget(),
+            SizedBox(height: 50),
+            ChangeAppearanceWidget(name: "Hat: ", maxSelections: 2),
+            SizedBox(height: 10),
+            WizardIconWidget(),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ChangeAppearanceWidget(name: 'Wand:', maxSelections: 3,),
+                SizedBox(width: 20),
+                ChangeAppearanceWidget(name: 'Cloak: ', maxSelections: 3),
+              ],
+            ),
+            SizedBox(height: 50,),
+            CreateButtonWidget(text: 'Finish'),
           ],
         ),
       )

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/screens/welcome_page.dart';
+import 'package:hocus_focus/styles/colors.dart';
 
 void main() {  
   runApp(const MyApp());
@@ -14,7 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Hocus Focus',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        scaffoldBackgroundColor: MyColors.background,
         useMaterial3: true,
       ),
       home: WelcomePage()

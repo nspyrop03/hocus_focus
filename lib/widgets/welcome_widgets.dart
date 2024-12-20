@@ -90,14 +90,14 @@ class ChangeAppearanceWidget extends StatefulWidget {
   final dynamic name;
   final dynamic maxSelections;
 
-  const ChangeAppearanceWidget({super.key, required this.name, required this.maxSelections});
+  const ChangeAppearanceWidget(
+      {super.key, required this.name, required this.maxSelections});
 
   @override
   State<ChangeAppearanceWidget> createState() => _ChangeAppearanceWidgetState();
 }
 
 class _ChangeAppearanceWidgetState extends State<ChangeAppearanceWidget> {
-
   var currentSelection = 1;
 
   @override
@@ -143,7 +143,8 @@ class _ChangeAppearanceWidgetState extends State<ChangeAppearanceWidget> {
                             onTap: () {
                               print('Tapped previous');
                               setState(() {
-                                currentSelection = math.max(1, currentSelection - 1);
+                                currentSelection =
+                                    math.max(1, currentSelection - 1);
                               });
                             },
                             child: SvgPicture.asset(
@@ -161,7 +162,8 @@ class _ChangeAppearanceWidgetState extends State<ChangeAppearanceWidget> {
                             onTap: () {
                               print('Tapped next');
                               setState(() {
-                                currentSelection = math.min(widget.maxSelections, currentSelection + 1);
+                                currentSelection = math.min(
+                                    widget.maxSelections, currentSelection + 1);
                               });
                             },
                             child: SvgPicture.asset(
@@ -175,5 +177,86 @@ class _ChangeAppearanceWidgetState extends State<ChangeAppearanceWidget> {
                 ),
               )),
         ]));
+  }
+}
+
+class CreateButtonWidget extends StatelessWidget {
+  final dynamic text;
+
+  const CreateButtonWidget({super.key, required this.text});
+  @override
+  Widget build(BuildContext context) {
+    // Figma Flutter Generator CreatebuttonWidget - INSTANCE
+    return SizedBox(
+        width: 150,
+        height: 62,
+        child: GestureDetector(
+            onTap: () {
+              print('Button pressed');
+            },
+            child: Stack(children: <Widget>[
+              Positioned(
+                  top: 0,
+                  left: 0,
+                  child: Container(
+                      width: 150,
+                      height: 62,
+                      decoration: BoxDecoration(
+                        borderRadius: MyStyles.roundBox16,
+                        boxShadow: [
+                          MyStyles.boxShadowBasic,
+                        ],
+                        color: MyColors.secondary,
+                        border: MyStyles.borderAll1,
+                      ))),
+              Center(
+                child: Text(
+                  text,
+                  textAlign: TextAlign.center,
+                  style: MyStyles.magic24,
+                ),
+              ),
+            ])));
+  }
+}
+
+class PageTitleWidget extends StatelessWidget {
+  final dynamic title;
+  const PageTitleWidget({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          title,
+          textAlign: TextAlign.left,
+          style: MyStyles.magic24,
+        ),
+        Divider(
+          color: MyColors.details,
+          thickness: 2,
+          indent: 10,
+          endIndent: 10,
+        ),
+      ],
+    );
+  }
+}
+
+//===== It needs a ton of changes, maybe even seperate file!!! =====\\
+class WizardIconWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Figma Flutter Generator WizardiconWidget - RECTANGLE
+    return Container(
+        width: 148,
+        height: 168,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/Wizardicon.png'),
+              fit: BoxFit.fitWidth),
+        ));
   }
 }
