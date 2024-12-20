@@ -15,10 +15,12 @@ class TestPage extends StatelessWidget {
               Text("Test Page"),
               //LevelBarWidget(level: 42, exp: 300),
               //CoinsWidget(coins: 100000),
+              //NavBarButton(iconPath: "assets/images/nav_icons/ShopIcon.svg", width: 24, height: 22),
             ],
           )),
         ],
       ),
+      bottomNavigationBar: BottomBarWidget(),
     );
   }
 }

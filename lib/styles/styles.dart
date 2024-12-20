@@ -39,6 +39,13 @@ class MyStyles {
     bottomRight: Radius.circular(15),
   );
 
+  static const BorderRadiusGeometry bottomBox = BorderRadius.only(
+    topLeft: Radius.circular(15),
+    topRight: Radius.circular(15),
+    bottomLeft: Radius.circular(0),
+    bottomRight: Radius.circular(0),
+  );
+
   static Border borderAll1 = Border.all(
     color: Color.fromRGBO(0, 0, 0, 1),
     width: 1,

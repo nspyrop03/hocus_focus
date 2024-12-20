@@ -8,27 +8,89 @@ class TopBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Figma Flutter Generator UpbarWidget - COMPONENT
     return Container(
-        width: double.infinity,
-        height: 55,
-        decoration: BoxDecoration(
-          borderRadius: MyStyles.topBox,
-          boxShadow: [MyStyles.boxShadowBasic],
-          color: MyColors.primary,
-          border: MyStyles.borderAll1,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: LevelBarWidget(level: 42, exp: 100),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: CoinsWidget(coins: 100000000),
-            ),
-          ],
-        ),);
+      width: double.infinity,
+      height: 55,
+      decoration: BoxDecoration(
+        borderRadius: MyStyles.topBox,
+        boxShadow: [MyStyles.boxShadowBasic],
+        color: MyColors.primary,
+        border: MyStyles.borderAll1,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: LevelBarWidget(level: 42, exp: 100),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: CoinsWidget(coins: 100000000),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BottomBarWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 55,
+      decoration: BoxDecoration(
+        borderRadius: MyStyles.bottomBox,
+        boxShadow: [MyStyles.boxShadowBasic],
+        color: MyColors.primary,
+        border: MyStyles.borderAll1,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          NavBarButton(iconPath: 'assets/images/nav_icons/ShopIcon.svg',
+              width: 24, height: 22),
+          NavBarButton(iconPath: 'assets/images/nav_icons/BookVector.svg',
+              width: 27, height: 23),
+          NavBarButton(iconPath: 'assets/images/nav_icons/HomeVector.svg',
+              width: 29, height: 30),
+          NavBarButton(iconPath: 'assets/images/nav_icons/CalendarVector.svg',
+              width: 21, height: 22),
+          NavBarButton(iconPath: 'assets/images/nav_icons/ToDoListVector.svg',
+              width: 23, height: 18),
+        ],
+      ),
+    );
+  }
+}
+
+class NavBarButton extends StatelessWidget {
+  final String iconPath;
+  final double width;
+  final double height;
+
+  const NavBarButton(
+      {super.key, required this.iconPath, required this.width, required this.height});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 43,
+      height: 43,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        boxShadow: [MyStyles.boxShadowBasic],
+        color: MyColors.tertiary,
+        border: MyStyles.borderAll1
+      ),
+      child: IconButton(
+        onPressed: () {
+          print("Pressed NavBarButton");
+        },
+        icon: SvgPicture.asset(iconPath, width: width, height: height),
+      ),
+      
+    );
   }
 }
 
@@ -42,9 +104,7 @@ class LevelBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
+    return Row(mainAxisSize: MainAxisSize.min, children: [
       Text(
         'Level: $level',
         style: MyStyles.magic14,
