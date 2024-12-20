@@ -2,24 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:hocus_focus/styles/colors.dart';
 
 class MyStyles {
-
   static const TextStyle magic14 = TextStyle(
-    color: Color(0xff000000),
-    fontFamily: 'AvolisseDEMO',
-    fontSize: 14,
-    letterSpacing: 0,
-    fontWeight: FontWeight.normal,
-    height: 1
-  );
+      color: Color(0xff000000),
+      fontFamily: 'AvolisseDEMO',
+      fontSize: 14,
+      letterSpacing: 0,
+      fontWeight: FontWeight.normal,
+      height: 1);
 
   static const TextStyle magic24 = TextStyle(
-    color: Color(0xff000000),
-    fontFamily: 'AvolisseDEMO',
-    fontSize: 24,
-    letterSpacing: 0,
-    fontWeight: FontWeight.normal,
-    height: 1
-  );
+      color: Color(0xff000000),
+      fontFamily: 'AvolisseDEMO',
+      fontSize: 24,
+      letterSpacing: 0,
+      fontWeight: FontWeight.normal,
+      height: 1);
 
   static const BorderRadiusGeometry roundBox16 = BorderRadius.only(
     topLeft: Radius.circular(16),
@@ -35,16 +32,22 @@ class MyStyles {
     bottomRight: Radius.circular(8),
   );
 
+  static const BorderRadiusGeometry topBox = BorderRadius.only(
+    topLeft: Radius.circular(0),
+    topRight: Radius.circular(0),
+    bottomLeft: Radius.circular(15),
+    bottomRight: Radius.circular(15),
+  );
+
   static Border borderAll1 = Border.all(
     color: Color.fromRGBO(0, 0, 0, 1),
     width: 1,
   );
 
   static const BoxShadow boxShadowBasic = BoxShadow(
-    color: Color.fromRGBO(0, 0, 0, 0.25),
-    offset: Offset(0, 4),
-    blurRadius: 4
-  );
+      color: Color.fromRGBO(0, 0, 0, 0.25),
+      offset: Offset(0, 4),
+      blurRadius: 4);
 
   static ButtonStyle createButtonStyle = ElevatedButton.styleFrom(
     backgroundColor: MyColors.secondary,
@@ -53,5 +56,4 @@ class MyStyles {
       borderRadius: roundBox8,
     ),
   );
-
 }
