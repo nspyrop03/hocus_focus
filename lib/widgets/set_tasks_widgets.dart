@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'dart:math' as math;
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
-import 'package:hocus_focus/widgets/welcome_widgets.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:flutter/material.dart';
+
 
 class InputtextfieldWidget extends StatelessWidget {
   final String hintText; // Parameter for the hint text
@@ -84,7 +81,7 @@ class EventInputWidget extends StatelessWidget {
                       bottomRight: Radius.circular(16),
                     ),
                     boxShadow: [MyStyles.boxShadowBasic],
-                    color: Color.fromRGBO(255, 230, 230, 1),
+                    color: MyColors.primary,
                   ))),
           Positioned(
               top: 93,
@@ -173,7 +170,7 @@ class _DifficultyselectionfullWidgetState
                   bottomRight: Radius.circular(16),
                 ),
                 boxShadow: [MyStyles.boxShadowBasic],
-                color: Color.fromRGBO(255, 230, 230, 1),
+                color: MyColors.primary,
               ),
             ),
           ),
@@ -346,7 +343,7 @@ class EventdescriptioninputWidget extends StatelessWidget {
                       bottomRight: Radius.circular(16),
                     ),
                     boxShadow: [MyStyles.boxShadowBasic],
-                    color: Color.fromRGBO(255, 230, 230, 1),
+                    color: MyColors.primary,
                   ))),
           Positioned(top: 35, left: 13, child: InputtextfieldWidget(hintText: "Add Description",  width: 385, height: 29,)),
           Positioned(
