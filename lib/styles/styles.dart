@@ -18,6 +18,14 @@ class MyStyles {
       fontWeight: FontWeight.normal,
       height: 1);
 
+  static const TextStyle magic40 = TextStyle(
+      color: Color(0xff000000),
+      fontFamily: 'AvolisseDEMO',
+      fontSize: 40,
+      letterSpacing: 0,
+      fontWeight: FontWeight.normal,
+      height: 1);
+
   static const BorderRadiusGeometry roundBox16 = BorderRadius.only(
     topLeft: Radius.circular(16),
     topRight: Radius.circular(16),

@@ -30,39 +30,37 @@ class _SpotifyDropdownWidgetState extends State<SpotifyDropdownWidget> {
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
-          value: selectedTrack,
-          hint: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: SpotifyLabelWidget(label: 'Select a track'),
-          ),
-          isExpanded: true,
-          icon: Icon(Icons.arrow_drop_down),
-          onChanged: (String? newValue) {
-            setState(() {
-              selectedTrack = newValue;
-            });
-          },
-          items: tracks.map<DropdownMenuItem<String>>((String track) {
-            return DropdownMenuItem<String>(
-              value: track,
-              child: Text(
-                track,
-                style: MyStyles.magic14,
-              ),
-            );
-          }).toList(),
-          selectedItemBuilder: (BuildContext context) {
-            return tracks.map<Widget>((String track) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                child: SpotifyLabelWidget(label: track),
+            value: selectedTrack,
+            hint: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5.0),
+              child: SpotifyLabelWidget(label: 'Select a track'),
+            ),
+            isExpanded: true,
+            icon: Icon(Icons.arrow_drop_down),
+            onChanged: (String? newValue) {
+              setState(() {
+                selectedTrack = newValue;
+              });
+            },
+            items: tracks.map<DropdownMenuItem<String>>((String track) {
+              return DropdownMenuItem<String>(
+                value: track,
+                child: Text(
+                  track,
+                  style: MyStyles.magic14,
+                ),
               );
-            }).toList();
-          },
-          dropdownColor: MyColors.primary,
-          menuWidth: double.infinity,
-          
-        ),
+            }).toList(),
+            selectedItemBuilder: (BuildContext context) {
+              return tracks.map<Widget>((String track) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: SpotifyLabelWidget(label: track),
+                );
+              }).toList();
+            },
+            dropdownColor: MyColors.primary,
+            menuWidth: double.infinity),
       ),
     );
   }
@@ -91,3 +89,4 @@ class SpotifyLabelWidget extends StatelessWidget {
     );
   }
 }
+
