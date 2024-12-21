@@ -41,7 +41,7 @@ class CalendarPage extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomBarWidget(),
+      //bottomNavigationBar: BottomBarWidget(),
     );
   }
 }

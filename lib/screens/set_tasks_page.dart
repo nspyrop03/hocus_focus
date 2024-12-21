@@ -23,7 +23,7 @@ class SetTasksPage extends StatelessWidget {
           CreateButtonWidget(text: 'Create')
         ],
       ),
-      bottomNavigationBar: BottomBarWidget(),
+      //bottomNavigationBar: BottomBarWidget(),
     );
   }
 }

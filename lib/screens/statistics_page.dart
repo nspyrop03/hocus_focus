@@ -21,7 +21,7 @@ class StatisticsPage extends StatelessWidget {
           )),
         ],
       ),
-      bottomNavigationBar: BottomBarWidget(),
+      //bottomNavigationBar: BottomBarWidget(),
     );
   }
 }

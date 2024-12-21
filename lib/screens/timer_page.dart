@@ -41,7 +41,7 @@ class TimerPage extends StatelessWidget {
           )),
         ],
       ),
-      bottomNavigationBar: BottomBarWidget(),
+      //bottomNavigationBar: BottomBarWidget(),
     );
   }
 }

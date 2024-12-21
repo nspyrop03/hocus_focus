@@ -34,6 +34,10 @@ class TopBarWidget extends StatelessWidget {
 }
 
 class BottomBarWidget extends StatelessWidget {
+  final Function(int) onPressed;
+
+  const BottomBarWidget({super.key, required this.onPressed});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,15 +53,15 @@ class BottomBarWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           NavBarButton(iconPath: 'assets/images/nav_icons/ShopIcon.svg',
-              width: 24, height: 22),
+              width: 24, height: 22, index: 0, onPressed: onPressed,),
           NavBarButton(iconPath: 'assets/images/nav_icons/BookVector.svg',
-              width: 27, height: 23),
+              width: 27, height: 23, index: 1, onPressed: onPressed,),
           NavBarButton(iconPath: 'assets/images/nav_icons/HomeVector.svg',
-              width: 29, height: 30),
+              width: 29, height: 30, index: 2, onPressed: onPressed,),
           NavBarButton(iconPath: 'assets/images/nav_icons/CalendarVector.svg',
-              width: 21, height: 22),
+              width: 21, height: 22, index: 3, onPressed: onPressed,),
           NavBarButton(iconPath: 'assets/images/nav_icons/ToDoListVector.svg',
-              width: 23, height: 18),
+              width: 23, height: 18, index: 4, onPressed: onPressed,),
         ],
       ),
     );
@@ -68,9 +72,11 @@ class NavBarButton extends StatelessWidget {
   final String iconPath;
   final double width;
   final double height;
+  final Function(int) onPressed;
+  final int index;
 
-  const NavBarButton(
-      {super.key, required this.iconPath, required this.width, required this.height});
+  NavBarButton(
+      {super.key, required this.iconPath, required this.width, required this.height, required this.index, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +92,7 @@ class NavBarButton extends StatelessWidget {
       child: IconButton(
         onPressed: () {
           print("Pressed NavBarButton");
+          onPressed(index);
         },
         icon: SvgPicture.asset(iconPath, width: width, height: height),
       ),

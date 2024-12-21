@@ -24,7 +24,7 @@ class TestPage extends StatelessWidget {
           )),
         ],
       ),
-      bottomNavigationBar: BottomBarWidget(),
+      //bottomNavigationBar: BottomBarWidget(),
     );
   }
 }
