@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: MyColors.background,
         useMaterial3: true,
       ),
-      home: HomePage()//TestPage()//SetTasksPage()//WelcomePage()
+      home: SetTasksPage()//HomePage()//TestPage()//WelcomePage()
     );
   }
 }

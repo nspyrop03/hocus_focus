@@ -19,6 +19,10 @@ class SetTasksPage extends StatelessWidget {
           EventInputWidget(),
           SizedBox(height: 20),
           DifficultyselectionfullWidget(),
+          SizedBox(height: 20),
+          EventdescriptioninputWidget(),
+          SizedBox(height: 60),
+          CreateButtonWidget(text: 'Create')
         ],
       ),
       bottomNavigationBar: BottomBarWidget(),
