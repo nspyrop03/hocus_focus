@@ -1,9 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/widgets/bar_widgets.dart';
-import 'package:hocus_focus/widgets/home_widgets.dart';
 import 'package:hocus_focus/widgets/calendar_widgets.dart';
 
 
+class CalendarPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          TopBarWidget(),
+          SizedBox(height: 10),
+          // Flexible ensures proper space allocation for the content
+          Flexible(
+            child: Stack(
+              children: [
+                // ListView includes TableBasicsExample and EventdisplayWidgets
+                Positioned.fill(
+                  child: ListView(
+                    padding: EdgeInsets.all(10.0), // Add padding around the list
+                    children: [
+                      TableBasicsExample(),
+                      EventdisplayWidget(),
+                      SizedBox(height: 15),
+                      EventdisplayWidget(),
+                      SizedBox(height: 15),
+                      EventdisplayWidget(),
+                      // Add more EventdisplayWidgets as needed
+                    ],
+                  ),
+                ),
+                // HoverplusbuttonWidget positioned at the top-right corner
+                Positioned(
+                  top: 300, // Adjust position as needed
+                  right: 10, // Adjust position as needed
+                  child: HoverplusbuttonWidget(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+
+
+/*
 class CalendarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -45,3 +90,4 @@ class CalendarPage extends StatelessWidget {
     );
   }
 }
+*/

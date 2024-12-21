@@ -133,6 +133,112 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
   }
 }
 
+
+class EventdisplayWidget extends StatelessWidget {
+  final String eventName;
+  final String eventDate;
+
+   EventdisplayWidget({
+    this.eventName = 'Default Event Name', // Default event name
+    this.eventDate = '15/12/2024',         // Default event date
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.0), // Add spacing between events
+      width: 360,
+      height: 60,
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            top: 0,
+            left: 0,
+            child: Container(
+              width: 360,
+              height: 60,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(8)),
+                boxShadow: [MyStyles.boxShadowBasic],
+                color: MyColors.primary, 
+              ),
+            ),
+          ),
+          Positioned(
+            top: 7,
+            left: 5,
+            child: Text(
+              eventDate, // Use dynamic event date
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: MyColors.details, // Replace with MyColors.details
+                fontFamily: 'AvolisseDEMO',
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                height: 1,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 45,
+            left: 318,
+            child: GestureDetector(
+              onTap: () {
+                // Handle Finish action
+                print('Finish tapped for $eventName');
+              },
+              child: Text(
+                'Finish',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: MyColors.accept, // Replace with MyColors.accept
+                  fontFamily: 'AvolisseDEMO',
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  height: 1,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 4,
+            left: 317,
+            child: GestureDetector(
+              onTap: () {
+                // Handle Delete action
+                print('Delete tapped for $eventName');
+              },
+              child: Text(
+                'Delete',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: MyColors.delete, // Replace with MyColors.delete
+                  fontFamily: 'AvolisseDEMO',
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  height: 1,
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 22,
+            left: 5,
+            child: Text(
+              eventName, // Use dynamic event name
+              textAlign: TextAlign.center,
+              style: MyStyles.magic14 // Replace with MyStyles.magic14
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+
+/*
 class EventdisplayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -234,7 +340,7 @@ class EventdisplayWidget extends StatelessWidget {
     );
   }
 }
-
+*/
 /*
 class EventdisplayWidget extends StatelessWidget {
   @override
