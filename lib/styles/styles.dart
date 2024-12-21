@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:hocus_focus/styles/colors.dart';
 
 class MyStyles {
+
+  static const TextStyle magic10 = TextStyle(
+      color: Color(0xff000000),
+      fontFamily: 'AvolisseDEMO',
+      fontSize: 10,
+      letterSpacing: 0,
+      fontWeight: FontWeight.normal,
+      height: 1);
+
   static const TextStyle magic14 = TextStyle(
       color: Color(0xff000000),
       fontFamily: 'AvolisseDEMO',

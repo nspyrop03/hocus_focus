@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/widgets/bar_widgets.dart';
-import 'package:hocus_focus/widgets/clock_widget.dart';
-import 'package:hocus_focus/widgets/home_widgets.dart';
 import 'package:hocus_focus/widgets/stats_widgets.dart';
-import 'package:hocus_focus/widgets/task_list_widgets.dart';
-import 'package:hocus_focus/widgets/timer_widgets.dart';
 
-class TestPage extends StatelessWidget {
+class StatisticsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,8 +13,9 @@ class TestPage extends StatelessWidget {
           Expanded(
               child: Column(
             children: [
-              Text("Test Page"),
+              SizedBox(height: 20),
               StatsInfoWidget(),
+              SizedBox(height: 20,),
               StatsBarGraphWidget(),
             ],
           )),
