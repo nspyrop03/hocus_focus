@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/screens/home_page.dart';
 import 'package:hocus_focus/screens/set_tasks_page.dart';
+import 'package:hocus_focus/screens/task_list_page.dart';
 import 'package:hocus_focus/screens/test_page.dart';
 import 'package:hocus_focus/screens/timer_page.dart';
 import 'package:hocus_focus/screens/welcome_page.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: MyColors.background,
         useMaterial3: true,
       ),
-      home: TestPage()//SetTasksPage()//WelcomePage()
+      home: TaskListPage()//TestPage()//SetTasksPage()//WelcomePage()
     );
   }
 }

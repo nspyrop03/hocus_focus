@@ -27,7 +27,8 @@ class TestPage extends StatelessWidget {
               //TimerButtonWidget(isTimer: true),
               //StartStopButtonWidget(isPaused: true),
               //QuitButtonWidget(),
-              TaskListItemWidget(description: "Task List Entry", isDone: false)
+              TaskListItemWidget(description: "Task List Entry", isDone: false),
+              PlusButtonWidget()
             ],
           )),
         ],
