@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hocus_focus/widgets/bar_widgets.dart';
 import 'package:hocus_focus/widgets/clock_widget.dart';
 import 'package:hocus_focus/widgets/home_widgets.dart';
+import 'package:hocus_focus/widgets/timer_widgets.dart';
 
 class TestPage extends StatelessWidget {
   @override
@@ -21,6 +22,10 @@ class TestPage extends StatelessWidget {
               SpotifyDropdownWidget(),
               SizedBox(height: 20,),
               ClockProgressWidget(seconds: 120, isStopwatch: true,),
+              SizedBox(height: 10,),
+              TimerButtonWidget(isTimer: true),
+              StartStopButtonWidget(isPaused: true),
+              QuitButtonWidget(),
             ],
           )),
         ],
