@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:hocus_focus/screens/calendar_page.dart';
-import 'package:hocus_focus/screens/home_page.dart';
 import 'package:hocus_focus/screens/main_page.dart';
-import 'package:hocus_focus/screens/set_tasks_page.dart';
-import 'package:hocus_focus/screens/statistics_page.dart';
-import 'package:hocus_focus/screens/task_list_page.dart';
-import 'package:hocus_focus/screens/test_page.dart';
-import 'package:hocus_focus/screens/timer_page.dart';
-import 'package:hocus_focus/screens/welcome_page.dart';
+import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/styles/colors.dart';
 
-void main() {  
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await DatabaseHelper().database;
   runApp(const MyApp());
 }
 
@@ -23,11 +18,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Hocus Focus',
       theme: ThemeData(
-        //colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         scaffoldBackgroundColor: MyColors.background,
         useMaterial3: true,
       ),
-      home: CalendarPage()//MainPage()//HomePage()//TestPage()//WelcomePage()
+      home: MainPage()
     );
   }
 }
