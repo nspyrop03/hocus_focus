@@ -3,6 +3,7 @@ import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
 import 'package:hocus_focus/widgets/bar_widgets.dart';
 import 'package:hocus_focus/widgets/spellbook_widgets.dart';
+import 'package:hocus_focus/widgets/welcome_widgets.dart';
 
 
 class SpellbookPage extends StatelessWidget {
@@ -30,6 +31,9 @@ class SpellbookPage extends StatelessWidget {
         body: Column(
           children: [
             TopBarWidget(), // Top bar remains at the top
+            SafeArea(
+            child: PageTitleWidget(title: "Spellbook"),
+          ),
             Expanded(
               child: Scrollbar(
                 child: SingleChildScrollView(
@@ -38,6 +42,7 @@ class SpellbookPage extends StatelessWidget {
                     child: Column(
                       children: [
                         // Title "Spellbook" above the spell slots
+                        /*
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 20.0), // Add vertical spacing around the title
                           child: Text(
@@ -45,6 +50,7 @@ class SpellbookPage extends StatelessWidget {
                             style: MyStyles.magic40,
                           ),
                         ),
+                        */
                         // Spell slots (your GridView)
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
