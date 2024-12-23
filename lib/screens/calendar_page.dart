@@ -1,7 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:hocus_focus/screens/set_tasks_page.dart';
 import 'package:hocus_focus/widgets/bar_widgets.dart';
 import 'package:hocus_focus/widgets/calendar_widgets.dart';
 
+
+
+class CalendarPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          TopBarWidget(),
+          SizedBox(height: 10),
+          Flexible(
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: ListView(
+                    padding: EdgeInsets.all(10.0),
+                    children: [
+                      TableBasicsExample(),
+                      EventdisplayWidget(),
+                      SizedBox(height: 15),
+                      EventdisplayWidget(),
+                      SizedBox(height: 15),
+                      EventdisplayWidget(),
+                    ],
+                  ),
+                ),
+                // HoverplusbuttonWidget positioned at the top-right corner
+                Positioned(
+                  top: 300,
+                  right: 10,
+                  child: HoverplusbuttonWidget(
+                    onTap: () {
+                      // Navigate to Event Details Page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SetTasksPage()),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+/*
 
 class CalendarPage extends StatelessWidget {
   @override
@@ -45,7 +97,7 @@ class CalendarPage extends StatelessWidget {
   }
 }
 
-
+*/
 
 
 /*

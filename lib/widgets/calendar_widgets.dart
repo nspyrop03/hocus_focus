@@ -238,191 +238,71 @@ class EventdisplayWidget extends StatelessWidget {
 
 
 
-/*
-class EventdisplayWidget extends StatelessWidget {
+class HoverplusbuttonWidget extends StatelessWidget {
+  final VoidCallback onTap;
+
+  HoverplusbuttonWidget({required this.onTap});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 360,
-      height: 60,
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Container(
-              width: 360,
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                boxShadow: [MyStyles.boxShadowBasic],
-                color: MyColors
-                    .primary, // Replace with MyColors.primary if defined
-              ),
-            ),
-          ),
-          Positioned(
-            top: 7,
-            left: 5,
-            child: Text(
-              '15/11/2023',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: MyColors
-                    .details, // Replace with MyColors.details if defined
-                fontFamily: 'AvolisseDEMO',
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                height: 1,
-              ),
-            ),
-          ),
-          Positioned(
-            top: 20,
-            left: 5,
-            child: SvgPicture.asset('assets/images/vector25.svg'),
-          ),
-          Positioned(
-            top: 45,
-            left: 318,
-            child: GestureDetector(
-              onTap: () {
-                // Handle Finish action
-                print('Finish tapped');
-              },
-              child: Text(
-                'Finish',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: MyColors
-                      .accept, // Replace with MyColors.accept if defined
-                  fontFamily: 'AvolisseDEMO',
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                  height: 1,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 60,
+        height: 60,
+        child: Stack(
+          children: <Widget>[
+            // Background circle container
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  color: MyColors.details,
+                  borderRadius: BorderRadius.all(Radius.elliptical(60, 60)),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: 4,
-            left: 317,
-            child: GestureDetector(
-              onTap: () {
-                // Handle Delete action
-                print('Delete tapped');
-              },
-              child: Text(
-                'Delete',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: MyColors
-                      .delete, // Replace with MyColors.delete if defined
-                  fontFamily: 'AvolisseDEMO',
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                  height: 1,
+            // Inner content with SVGs
+            Positioned(
+              top: 13,
+              left: 13,
+              child: Container(
+                width: 34,
+                height: 34,
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                      top: 15,
+                      left: 0,
+                      child: SvgPicture.asset(
+                        'assets/images/vector24.svg',
+                        semanticsLabel: 'vector24',
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 16,
+                      child: SvgPicture.asset(
+                        'assets/images/vector23.svg',
+                        semanticsLabel: 'vector23',
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-          ),
-          Positioned(
-            top: 22,
-            left: 5,
-            child: Text(
-              'Event Name',
-              textAlign: TextAlign.center,
-              style: MyStyles.magic14,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
-*/
+
+
 /*
-class EventdisplayWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Figma Flutter Generator EventdisplayWidget - INSTANCE
-    return Container(
-        width: 360,
-        height: 60,
-        child: Stack(children: <Widget>[
-          Positioned(
-              top: 0,
-              left: 0,
-              child: Container(
-                  width: 360,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8),
-                      bottomLeft: Radius.circular(8),
-                      bottomRight: Radius.circular(8),
-                    ),
-                    boxShadow: [MyStyles.boxShadowBasic],
-                    color: MyColors.primary,
-                  ))),
-          Positioned(
-              top: 7,
-              left: 5,
-              child: Text(
-                '15/11/2023',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: MyColors.details,
-                    fontFamily: 'AvolisseDEMO',
-                    fontSize: 14,
-                    letterSpacing: 0,
-                    fontWeight: FontWeight.normal,
-                    height: 1),
-              )),
-          Positioned(
-            top: 20,
-            left: 5,
-            child: SvgPicture.asset('assets/images/vector25.svg',
-                semanticsLabel: 'vector25'),
-          ),
-          Positioned(
-              top: 45,
-              left: 318,
-              child: Text(
-                'Finish',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: MyColors.accept,
-                    fontFamily: 'AvolisseDEMO',
-                    fontSize: 14,
-                    letterSpacing: 0,
-                    fontWeight: FontWeight.normal,
-                    height: 1),
-              )),
-          Positioned(
-              top: 4,
-              left: 317,
-              child: Text(
-                'Delete',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: MyColors.delete,
-                    fontFamily: 'AvolisseDEMO',
-                    fontSize: 14,
-                    letterSpacing: 0,
-                    fontWeight: FontWeight.normal,
-                    height: 1),
-              )),
-          Positioned(
-              top: 22,
-              left: 5,
-              child: Text('Event Name',
-                  textAlign: TextAlign.center, style: MyStyles.magic14)),
-        ]));
-  }
-}
-*/
 class HoverplusbuttonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -484,3 +364,4 @@ class HoverplusbuttonWidget extends StatelessWidget {
     );
   }
 }
+*/

@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: MyColors.background,
         useMaterial3: true,
       ),
-      home: ShopPage()
+      home: CalendarPage()
     );
   }
 }
