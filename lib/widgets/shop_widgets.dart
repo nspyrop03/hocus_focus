@@ -3,86 +3,140 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
 
-class Category1Widget extends StatelessWidget {
+class ShopWidgets extends StatefulWidget {
+  @override
+  _ShopPageWidgetsState createState() => _ShopPageWidgetsState();
+}
+
+class _ShopPageWidgetsState extends State<ShopWidgets> {
+  // List of items for each category
+  final List<String> wands = List.generate(12, (index) => "Wand ${index + 1}");
+  final List<String> cloaks = List.generate(12, (index) => "Cloak ${index + 1}");
+  final List<String> hats = List.generate(12, (index) => "Hat ${index + 1}");
+
+  String selectedCategory = "Wands";
+
   @override
   Widget build(BuildContext context) {
-    // Figma Flutter Generator Category1Widget - VECTOR
-    return SvgPicture.asset('assets/images/category1.svg',
-        semanticsLabel: 'category1');
-    ;
+    List<String> items;
+    if (selectedCategory == "Wands") {
+      items = wands;
+    } else if (selectedCategory == "Cloaks") {
+      items = cloaks;
+    } else {
+      items = hats;
+    }
+
+    return Scaffold(
+      body: Column(
+        children: [
+          // Category Buttons
+          Container(
+            color: MyColors.background,
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CategoryButton(
+                  label: 'Wands',
+                  isSelected: selectedCategory == "Wands",
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = "Wands";
+                    });
+                  },
+                ),
+                CategoryButton(
+                  label: 'Cloaks',
+                  isSelected: selectedCategory == "Cloaks",
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = "Cloaks";
+                    });
+                  },
+                ),
+                CategoryButton(
+                  label: 'Hats',
+                  isSelected: selectedCategory == "Hats",
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = "Hats";
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+          // Items Grid
+          Expanded(
+            child: Container(
+              color: MyColors.details,
+              padding: EdgeInsets.all(8.0),
+              child: GridView.builder(
+                itemCount: items.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
+                ),
+                itemBuilder: (context, index) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: MyColors.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: Text(
+                        items[index],
+                        textAlign: TextAlign.center,
+                        style: MyStyles.magic14
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
-class ShopcategoriesWidget extends StatelessWidget {
+class CategoryButton extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  CategoryButton({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
   @override
   Widget build(BuildContext context) {
-    // Figma Flutter Generator ShopcategoriesWidget - INSTANCE
-    return Container(
-        width: 121,
-        height: 79,
-        child: Stack(children: <Widget>[
-          Positioned(top: 0, left: -10, child: Category1Widget()),
-          Positioned(
-              top: 24,
-              left: 0,
-              child: Text(
-                'Wands',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Color.fromRGBO(0, 0, 0, 1),
-                    fontFamily: 'AvolisseDEMO',
-                    fontSize: 20,
-                    letterSpacing: 0,
-                    fontWeight: FontWeight.normal,
-                    height: 1.5 /*PERCENT not supported*/
-                    ),
-              )),
-        ]));
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        decoration: BoxDecoration(
+          color: isSelected ? MyColors.secondary : MyColors.primary,
+          borderRadius: MyStyles.roundBox8,
+          border: Border.all(color: Colors.black),
+        ),
+        child: Text(
+          label,
+          style:TextStyle(
+            color: isSelected ? Color(0xff000000) : Colors.grey,
+            fontFamily: 'AvolisseDEMO',
+            fontSize: 14,
+            letterSpacing: 0,
+            fontWeight: FontWeight.normal,
+            height: 1),
+        ),
+      ),
+    );
   }
 }
 
-class Component2Widget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Figma Flutter Generator Component2Widget - INSTANCE
-    return Container(
-        width: 362,
-        height: 79,
-        child: Stack(children: <Widget>[
-          Positioned(top: 0, left: 0, child: ShopcategoriesWidget()),
-          Positioned(top: 0, left: 126, child: ShopcategoriesWidget()),
-          Positioned(top: 0, left: 247, child: ShopcategoriesWidget()),
-        ]));
-  }
-}
-
-class ShoprectangleWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Figma Flutter Generator ShoprectangleWidget - INSTANCE
-    return Container(
-        width: 362,
-        height: 564,
-        child: Stack(children: <Widget>[
-          Positioned(
-              top: 0,
-              left: 0,
-              child: Container(
-                  width: 362,
-                  height: 564,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                    color: MyColors.details,
-                    border: Border.all(
-                      color: MyColors.details,
-                      width: 1,
-                    ),
-                  ))),
-        ]));
-  }
-}

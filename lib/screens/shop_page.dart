@@ -6,20 +6,21 @@ import 'package:hocus_focus/widgets/shop_widgets.dart';
 import 'package:hocus_focus/widgets/welcome_widgets.dart';
 
 
-
 class ShopPage extends StatelessWidget {
   @override
-  Widget build(BuildContext context){
-    return Scaffold( 
+  Widget build(BuildContext context) {
+    return Scaffold(
       body: Column(
         children: [
-          TopBarWidget(), 
+          TopBarWidget(),
           SafeArea(
             child: PageTitleWidget(title: "Shop"),
           ),
-          Component2Widget()
-        ]
-      )
+          Expanded(
+            child: ShopWidgets(),
+          ),
+        ],
+      ),
     );
   }
 }
