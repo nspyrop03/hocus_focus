@@ -9,7 +9,6 @@ class TaskListPageLayout extends StatefulWidget {
 }
 
 class _TaskListPageLayoutState extends State<TaskListPageLayout> {
-
   List<Map<String, dynamic>> _tasks = [];
   @override
   void initState() {
@@ -65,8 +64,8 @@ class _TaskListPageLayoutState extends State<TaskListPageLayout> {
                                     _loadTasks();
                                   },
                                   taskId: snapshot.data?[index]['id'],
-                                  description: 
-                                      snapshot.data?[index]['description'],
+                                  description: snapshot.data?[index]
+                                      ['description'],
                                   isDone:
                                       snapshot.data?[index]['completed'] == 1)),
                         );
@@ -87,10 +86,10 @@ class _TaskListPageLayoutState extends State<TaskListPageLayout> {
               child: PlusButtonWidget(
                 onPressed: () {
                   showDialog(
-                    context: context, 
-                    builder: (context) {
-                      return AddTaskDialog(onAddTask: _addTask);
-                    });
+                      context: context,
+                      builder: (context) {
+                        return AddTaskDialog(onAddTask: _addTask);
+                      });
                 },
               ),
             ),
