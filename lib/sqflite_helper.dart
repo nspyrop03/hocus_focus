@@ -141,4 +141,26 @@ class DatabaseHelper {
     //like [{id: 1, title: 'Task 1', status: 1}, {id: 2, title: 'Task 2', status: 0}]
     return await db.query('task');
   }
+
+  Future<List<Map<String, dynamic>>> getItems() async {
+    final db = await database;
+    return await db.query('item');
+  }
+
+  Future<List<String>> getItemAssetsOfType(String type) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('item', where: 'type = ?', whereArgs: [type]);
+    return List.generate(maps.length, (i) {
+      return maps[i]['asset'];
+    });
+  }
+
+  Future<List<String>> getWizardAssetsOfType(String type) async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('item', where: 'type = ?', whereArgs: [type]);
+    return List.generate(maps.length, (i) {
+      return maps[i]['asset'].replaceAll('assets/images/items/', 'assets/images/wizard/');
+    });
+  }
+
 }

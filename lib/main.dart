@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/screens/calendar_page.dart';
 import 'package:hocus_focus/screens/main_page.dart';
+import 'package:hocus_focus/screens/welcome_page.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/screens/spellbook_page.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: MyColors.background,
         useMaterial3: true,
       ),
-      home: MainPage()
+      home: WelcomePage() //MainPage()
     );
   }
 }
