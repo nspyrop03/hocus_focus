@@ -233,7 +233,15 @@ class PageTitleWidget extends StatelessWidget {
 }
 
 //===== It needs a ton of changes, maybe even seperate file!!! =====\\
-class WizardIconWidget extends StatelessWidget {
+class WizardIconWidget extends StatefulWidget {
+  @override
+  State<WizardIconWidget> createState() => _WizardIconWidgetState();
+}
+
+class _WizardIconWidgetState extends State<WizardIconWidget> {
+  final double _offsetX = 12.0;
+  final double _offsetY = 0.0;
+
   @override
   Widget build(BuildContext context) {
     // Figma Flutter Generator WizardiconWidget - RECTANGLE
@@ -241,9 +249,38 @@ class WizardIconWidget extends StatelessWidget {
         width: 148,
         height: 168,
         decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/images/Wizardicon.png'),
-              fit: BoxFit.fitWidth),
-        ));
+          border: MyStyles.borderAll1,
+        ),
+        child: Stack(
+        children: <Widget>[
+          Positioned(
+            top: _offsetY + 40,
+            left: _offsetX,
+            child: SvgPicture.asset(
+              'assets/images/wizard/purple_cloak.svg',
+              width: 148,
+              height: 168,
+            ),
+          ),
+          Positioned(
+            top: _offsetY,
+            left: _offsetX + 2.5,
+            child: SvgPicture.asset(
+              'assets/images/wizard/purple_hat.svg',
+              width: 148,
+              height: 168,
+            ),
+          ),
+          Positioned(
+            top: _offsetY + 18,
+            left: _offsetX + 48,
+            child: SvgPicture.asset(
+              'assets/images/wizard/yellow_wand.svg',
+              width: 148,
+              height: 168,
+            ),
+          ),
+        ],
+      ),);
   }
 }
