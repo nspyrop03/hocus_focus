@@ -7,7 +7,7 @@ import 'dart:math' as math;
 import 'package:flutter_svg/flutter_svg.dart';
 
 class NameInputFullBoxWidget extends StatelessWidget {
-  const NameInputFullBoxWidget({super.key});
+  final inputField = InputFieldGenericWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +34,13 @@ class NameInputFullBoxWidget extends StatelessWidget {
                   decoration: const BoxDecoration(),
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                  child: InputFieldGenericWidget())),
+                  child: inputField)),
         ]));
   }
 }
 
 class InputFieldGenericWidget extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -69,6 +70,7 @@ class InputFieldGenericWidget extends StatelessWidget {
                     width: 250,
                     height: 22,
                     child: TextField(
+                      controller: nameController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'Enter your name',
@@ -222,8 +224,12 @@ class _ChangeAppearanceWidgetState extends State<ChangeAppearanceWidget> {
 
 class CreateButtonWidget extends StatelessWidget {
   final dynamic text;
+  
+  final TextEditingController? inputField;
+  final VoidCallback? extraOnClick;
 
-  const CreateButtonWidget({super.key, required this.text});
+  const CreateButtonWidget(
+      {super.key, required this.text, this.inputField, this.extraOnClick});
   @override
   Widget build(BuildContext context) {
     // Figma Flutter Generator CreatebuttonWidget - INSTANCE
@@ -239,10 +245,15 @@ class CreateButtonWidget extends StatelessWidget {
           ),
           child: OutlinedButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => MainPage()),
-              );
+              print("Pressing the button!");
+              if (inputField != null && inputField!.text.isNotEmpty) {
+                print("Checked field! ${inputField!.text}");
+                extraOnClick!();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MainPage()),
+                );
+              }
             },
             style: MyStyles.createButtonStyle,
             child: Text(
@@ -292,44 +303,44 @@ class WizardIconWidgetState extends State<WizardIconWidget> {
   final double _offsetX = 12.0;
   final double _offsetY = 0.0;
 
-  int _currentCloakIndex = 0;
-  int _currentHatIndex = 0;
-  int _currentWandIndex = 0;
+  int currentCloakIndex = 0;
+  int currentHatIndex = 0;
+  int currentWandIndex = 0;
 
   void nextCloak() {
     setState(() {
-      _currentCloakIndex += 1;
+      currentCloakIndex += 1;
     });
   }
 
   void previousCloak() {
     setState(() {
-      _currentCloakIndex -= 1;
+      currentCloakIndex -= 1;
     });
   }
 
   void nextHat() {
     setState(() {
-      _currentHatIndex += 1;
+      currentHatIndex += 1;
     });
   }
 
   void previousHat() {
     setState(() {
-      _currentHatIndex -= 1;
+      currentHatIndex -= 1;
     });
   }
 
   void nextWand() {
     print("Next wand");
     setState(() {
-      _currentWandIndex += 1;
+      currentWandIndex += 1;
     });
   }
 
   void previousWand() {
     setState(() {
-      _currentWandIndex -= 1;
+      currentWandIndex -= 1;
     });
   }
 
@@ -368,7 +379,7 @@ class WizardIconWidgetState extends State<WizardIconWidget> {
                     top: _offsetY + 40,
                     left: _offsetX,
                     child: SvgPicture.asset(
-                      snapshot.data['cloaks'][_currentCloakIndex],
+                      snapshot.data['cloaks'][currentCloakIndex],
                       width: 148,
                       height: 168,
                     ),
@@ -377,7 +388,7 @@ class WizardIconWidgetState extends State<WizardIconWidget> {
                     top: _offsetY,
                     left: _offsetX + 2.5,
                     child: SvgPicture.asset(
-                      snapshot.data['hats'][_currentHatIndex],
+                      snapshot.data['hats'][currentHatIndex],
                       width: 148,
                       height: 168,
                     ),
@@ -386,7 +397,7 @@ class WizardIconWidgetState extends State<WizardIconWidget> {
                     top: _offsetY + 18,
                     left: _offsetX + 48,
                     child: SvgPicture.asset(
-                      snapshot.data['wands'][_currentWandIndex],
+                      snapshot.data['wands'][currentWandIndex],
                       width: 148,
                       height: 168,
                     ),

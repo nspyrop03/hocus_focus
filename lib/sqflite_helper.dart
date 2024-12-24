@@ -17,6 +17,9 @@ class DatabaseHelper {
 
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'app.db');
+
+    await deleteDatabase(path);
+
     return await openDatabase(
       path,
       version: 1,
@@ -28,8 +31,13 @@ class DatabaseHelper {
     await db.execute(
       'CREATE TABLE task(id INTEGER PRIMARY KEY AUTOINCREMENT, description TEXT, completed INTEGER)',
     );
+
     await db.execute(
-      'CREATE TABLE item(name TEXT PRIMARY KEY, asset TEXT, type TEXT, cost INTEGER)',
+      'CREATE TABLE item(name TEXT PRIMARY KEY, asset TEXT, type TEXT, cost INTEGER, bought INTEGER DEFAULT 0)',
+    );
+
+    await db.execute(
+      'CREATE TABLE profile(name TEXT PRIMARY KEY, exp INTEGER, coins INTEGER)'
     );
 
     // populate with items
@@ -103,6 +111,36 @@ class DatabaseHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  Future<void> createNewProfile(String name) async {
+    final db = await database;
+    db.insert(
+      'profile',
+      {
+        'name': name,
+        'exp': 0,
+        'coins': 0
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<String> getProfileName() async {
+    final db = await database;
+    final List<Map<String, dynamic>> request = await db.query('profile');
+    return request[0]['name'];
+  }
+
+  Future<int> getProfileExp() async {
+    final db = await database;
+    final List<Map<String, dynamic>> request = await db.query('profile');
+    return request[0]['exp'];
+  }
+
+  Future<int> getProfileCoins() async {
+    final db = await database;
+    final List<Map<String, dynamic>> request = await db.query('profile');
+    return request[0]['coins'];
+  }
+
   Future<void> insertItem(
       String name, String asset, String type, int cost) async {
     final db = await database;
@@ -133,6 +171,18 @@ class DatabaseHelper {
         },
         where: 'id = ?',
         whereArgs: [id]);
+  }
+
+  Future<void> updateItemBought(String name) async {
+    final db = await database;
+    db.update(
+      'item',
+      {
+        'bought': 1
+      },
+      where: 'name = ?',
+      whereArgs: [name]
+    );
   }
 
   Future<List<Map<String, dynamic>>> getTasks() async {
