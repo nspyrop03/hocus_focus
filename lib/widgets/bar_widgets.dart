@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
+import '../cache.dart' as cache;
 
 class TopBarWidget extends StatelessWidget {
   Future waitForData() async {
@@ -149,6 +150,7 @@ class NavBarButton extends StatelessWidget {
         onPressed: () {
           print("Pressed NavBarButton");
           onPressed(index);
+          cache.currentClock.value?.updateClock();
         },
         icon: SvgPicture.asset(iconPath, width: width, height: height),
       ),

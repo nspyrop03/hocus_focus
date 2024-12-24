@@ -14,7 +14,7 @@ class TimerButtonWidget extends StatelessWidget {
     try {
       min = int.parse(timer.split(":")[0]);
       sec = int.parse(timer.split(":")[1]);
-    } catch(err) {
+    } catch (err) {
       print("Error trying to parse input: $err");
     }
     int maxTime = min * 60 + sec;
@@ -35,10 +35,10 @@ class TimerButtonWidget extends StatelessWidget {
         ),
         onPressed: () {
           showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AddTimerDialog(onAddTimer: _addTimer);
-                      });
+              context: context,
+              builder: (context) {
+                return AddTimerDialog(onAddTimer: _addTimer, isTimer: isTimer);
+              });
         },
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -151,8 +151,9 @@ class _QuitButtonWidgetState extends State<QuitButtonWidget> {
 
 class AddTimerDialog extends StatefulWidget {
   final Function(String, bool) onAddTimer;
+  final bool isTimer;
 
-  const AddTimerDialog({super.key, required this.onAddTimer});
+  const AddTimerDialog({super.key, required this.onAddTimer, required this.isTimer});
 
   @override
   _AddTimerDialogState createState() => _AddTimerDialogState();
@@ -165,14 +166,18 @@ class _AddTimerDialogState extends State<AddTimerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Add New Timer', style: MyStyles.magic24,),
+      title: Text(
+        widget.isTimer ? 'Add New Timer' : 'Add New Stopwatch',
+        style: MyStyles.magic24,
+      ),
       backgroundColor: MyColors.primary,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextField(
             controller: _timerController,
-            decoration: InputDecoration(labelText: 'MM:SS', labelStyle: MyStyles.magic14),
+            decoration: InputDecoration(
+                labelText: 'MM:SS', labelStyle: MyStyles.magic14),
           ),
         ],
       ),
@@ -181,16 +186,22 @@ class _AddTimerDialogState extends State<AddTimerDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text('Cancel', style: MyStyles.magic14.copyWith(color: MyColors.details),),
+          child: Text(
+            'Cancel',
+            style: MyStyles.magic14.copyWith(color: MyColors.details),
+          ),
         ),
         TextButton(
           onPressed: () {
-            if(_timerController.text.isNotEmpty) {
+            if (_timerController.text.isNotEmpty) {
               widget.onAddTimer(_timerController.text, _isDone);
               Navigator.of(context).pop();
             }
           },
-          child: Text('Add', style: MyStyles.magic14.copyWith(color: MyColors.details),),
+          child: Text(
+            'Add',
+            style: MyStyles.magic14.copyWith(color: MyColors.details),
+          ),
         ),
       ],
     );

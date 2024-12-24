@@ -9,6 +9,7 @@ class TimerPageLayout extends StatefulWidget {
 }
 
 class _TimerPageLayoutState extends State<TimerPageLayout> {
+  Key _progressIndicatorKey = UniqueKey();
 
   @override
   void initState() {
@@ -23,7 +24,10 @@ class _TimerPageLayoutState extends State<TimerPageLayout> {
   }
 
   void _onClockChanged() {
-    setState(() {});
+    setState(() {
+      cache.currentClock.value?.updateClock();
+      _progressIndicatorKey = UniqueKey();
+    });
   }
 
   @override
@@ -47,7 +51,8 @@ class _TimerPageLayoutState extends State<TimerPageLayout> {
           height: 50,
         ),
         ClockProgressWidget(
-          seconds: cache.currentClock.value?.elapsedTime ?? 0,
+          key: _progressIndicatorKey,
+          start: cache.currentClock.value?.elapsedTime ?? 0,
           maxRecordTime: cache.currentClock.value?.maxTime ?? 0,
           isStopwatch: cache.currentClock.value?.isStopwatch ?? false,
         ),

@@ -9,11 +9,10 @@ class LoadClock {
   late int maxTime;
   late int elapsedTime;
   late bool isStopwatch;
-  late DateTime timeCreated;
-  
+  late DateTime _lastUpdate;
 
   LoadClock(this.maxTime, this.elapsedTime, this.isStopwatch) {
-    timeCreated = DateTime.now();
+    _lastUpdate = DateTime.now();
   }
 
   bool isFinished() {
@@ -22,7 +21,8 @@ class LoadClock {
 
   void updateClock() {
     final currentTime = DateTime.now();
-    final elapsed = currentTime.difference(timeCreated).inSeconds;
+    final elapsed = currentTime.difference(_lastUpdate).inSeconds;
+    _lastUpdate = currentTime;
     elapsedTime += elapsed;
     if(elapsedTime >= maxTime) {
       elapsedTime = maxTime;

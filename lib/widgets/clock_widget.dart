@@ -5,10 +5,10 @@ import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
 
 class ClockProgressWidget extends StatelessWidget {
-  final int seconds;
+  final int start;
   final int maxRecordTime;
   final bool isStopwatch;
-  const ClockProgressWidget({super.key, required this.seconds, required this.maxRecordTime, required this.isStopwatch});
+  const ClockProgressWidget({super.key, required this.start, required this.maxRecordTime, required this.isStopwatch});
 
   @override
   Widget build(BuildContext context) {
@@ -18,17 +18,8 @@ class ClockProgressWidget extends StatelessWidget {
       decoration: BoxDecoration(
         border: MyStyles.borderAll1,
       ),
-      child: //seconds > 0 
-      /*?*/ GradientCircularProgressIndicator(start: seconds, maxRecordTime: maxRecordTime, isStopwatch: isStopwatch,)
-      /*: Container(
-        width: 220,
-        height: 220,
-        decoration: BoxDecoration(
-          color: MyColors.primary,
-          shape: BoxShape.circle,
-        ),
-        child: Center(child: Text("Add new timer", style: MyStyles.magic24,))
-      ),*/
+      child: GradientCircularProgressIndicator(start: start, maxRecordTime: maxRecordTime, isStopwatch: isStopwatch,)
+      
     );
   }
 }
@@ -53,6 +44,7 @@ class _GradientCircularProgressIndicatorState
   void initState() {
     _timerVideo = ValueNotifier<int>(widget.start);
     tick();
+    print("Timer: ${_timerVideo.value}");
     super.initState();
   }
 

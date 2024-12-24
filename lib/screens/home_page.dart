@@ -20,10 +20,11 @@ class HomePageLayout extends StatelessWidget {
         ),
         GestureDetector(
             onTap: () {
+              cache.currentClock.value?.updateClock();
               welcome.mainPageKey.currentState?.onItemTapped(5);
             },
             child: ClockProgressWidget(
-              seconds: cache.currentClock.value?.elapsedTime ?? 0,
+              start: cache.currentClock.value?.elapsedTime ?? 0,
               maxRecordTime: cache.currentClock.value?.maxTime ?? 0,
               isStopwatch: cache.currentClock.value?.isStopwatch ?? false,
             )),
