@@ -1,3 +1,4 @@
+library welcome_widgets;
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/screens/main_page.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
@@ -222,6 +223,8 @@ class _ChangeAppearanceWidgetState extends State<ChangeAppearanceWidget> {
   }
 }
 
+final mainPageKey = GlobalKey<MainPageState>();
+
 class CreateButtonWidget extends StatelessWidget {
   final dynamic text;
   
@@ -251,7 +254,7 @@ class CreateButtonWidget extends StatelessWidget {
                 await extraOnClick!();
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => MainPage()),
+                  MaterialPageRoute(builder: (context) => MainPage(key: mainPageKey)),
                 );
               }
             },

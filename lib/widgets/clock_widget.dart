@@ -11,10 +11,23 @@ class ClockProgressWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       width: 220,
       height: 220,
-      child: GradientCircularProgressIndicator(maxRecordTime: seconds, isStopwatch: isStopwatch,),
+      decoration: BoxDecoration(
+        border: MyStyles.borderAll1,
+      ),
+      child: //seconds > 0 
+      /*?*/ GradientCircularProgressIndicator(maxRecordTime: seconds, isStopwatch: isStopwatch,)
+      /*: Container(
+        width: 220,
+        height: 220,
+        decoration: BoxDecoration(
+          color: MyColors.primary,
+          shape: BoxShape.circle,
+        ),
+        child: Center(child: Text("Add new timer", style: MyStyles.magic24,))
+      ),*/
     );
   }
 }

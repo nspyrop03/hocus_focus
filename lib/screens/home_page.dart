@@ -3,6 +3,7 @@ import 'package:hocus_focus/widgets/bar_widgets.dart';
 import 'package:hocus_focus/widgets/clock_widget.dart';
 import 'package:hocus_focus/widgets/home_widgets.dart';
 import 'package:hocus_focus/widgets/wizard_widgets.dart';
+import '../widgets/welcome_widgets.dart' as welcome;
 
 class HomePageLayout extends StatelessWidget {
   @override
@@ -16,10 +17,14 @@ class HomePageLayout extends StatelessWidget {
         SizedBox(
           height: 50,
         ),
-        ClockProgressWidget(
-          seconds: 120,
-          isStopwatch: true,
-        ),
+        GestureDetector(
+            onTap: () {
+              welcome.mainPageKey.currentState?.onItemTapped(5);
+            },
+            child: ClockProgressWidget(
+              seconds: 0,
+              isStopwatch: true,
+            )),
         SizedBox(
           height: 50,
         ),

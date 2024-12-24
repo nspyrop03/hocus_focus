@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/screens/home_page.dart';
 import 'package:hocus_focus/screens/task_list_page.dart';
+import 'package:hocus_focus/screens/timer_page.dart';
 import 'package:hocus_focus/widgets/bar_widgets.dart';
 
 class MainPage extends StatefulWidget {
+
+  MainPage({ super.key });
+
   @override
   State<MainPage> createState() => MainPageState();
 }
@@ -14,12 +18,16 @@ class MainPageState extends State<MainPage> {
   static List<Widget> _pages = <Widget>[
     HomePageLayout(), // 0: should be shop page
     HomePageLayout(), // 1: should be book page
-    HomePageLayout(),
+    HomePageLayout(), // 2: home
     HomePageLayout(), // 3: should be calendar page
-    TaskListPageLayout()
+    TaskListPageLayout(), // 4: tasks list
+    
+    // Extra pages!
+    TimerPageLayout(), // 5: timer page
   ];
 
-  void _onItemTapped(int index) {
+  void onItemTapped(int index) {
+    print("Tapping with index $index");
     setState(() {
       selectedIndex = index;
     });
@@ -38,7 +46,7 @@ class MainPageState extends State<MainPage> {
             Expanded(child: page),
           ],
         ),
-        bottomNavigationBar: BottomBarWidget(onPressed: _onItemTapped,),
+        bottomNavigationBar: BottomBarWidget(onPressed: onItemTapped,),
       );
     });
   }
