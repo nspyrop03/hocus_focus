@@ -1,35 +1,62 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
 
 class TopBarWidget extends StatelessWidget {
+  Future waitForData() async {
+    var dbh = DatabaseHelper();
+    var exp = await dbh.getProfileExp();
+    var coins = await dbh.getProfileCoins();
+    print("$exp, $coins");
+    return {"exp": exp, "coins": coins};
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Figma Flutter Generator UpbarWidget - COMPONENT
-    return Container(
-      width: double.infinity,
-      height: 55,
-      decoration: BoxDecoration(
-        borderRadius: MyStyles.topBox,
-        boxShadow: [MyStyles.boxShadowBasic],
-        color: MyColors.primary,
-        border: MyStyles.borderAll1,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: LevelBarWidget(level: 42, exp: 100),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
-            child: CoinsWidget(coins: 100000000),
-          ),
-        ],
-      ),
-    );
+    return FutureBuilder(
+        future: waitForData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done) {
+            return Container(
+              height: 55,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                borderRadius: MyStyles.topBox,
+                boxShadow: [MyStyles.boxShadowBasic],
+                color: MyColors.primary,
+                border: MyStyles.borderAll1,
+              ),
+            );
+          } else {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              height: 55,
+              decoration: BoxDecoration(
+                borderRadius: MyStyles.topBox,
+                boxShadow: [MyStyles.boxShadowBasic],
+                color: MyColors.primary,
+                border: MyStyles.borderAll1,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: LevelBarWidget(
+                        level: (snapshot.data['exp'] ~/ 10) + 1,
+                        exp: snapshot.data['exp']),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: CoinsWidget(coins: snapshot.data['coins']),
+                  ),
+                ],
+              ),
+            );
+          }
+        });
   }
 }
 
@@ -52,16 +79,41 @@ class BottomBarWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          NavBarButton(iconPath: 'assets/images/nav_icons/ShopIcon.svg',
-              width: 24, height: 22, index: 0, onPressed: onPressed,),
-          NavBarButton(iconPath: 'assets/images/nav_icons/BookVector.svg',
-              width: 27, height: 23, index: 1, onPressed: onPressed,),
-          NavBarButton(iconPath: 'assets/images/nav_icons/HomeVector.svg',
-              width: 29, height: 30, index: 2, onPressed: onPressed,),
-          NavBarButton(iconPath: 'assets/images/nav_icons/CalendarVector.svg',
-              width: 21, height: 22, index: 3, onPressed: onPressed,),
-          NavBarButton(iconPath: 'assets/images/nav_icons/ToDoListVector.svg',
-              width: 23, height: 18, index: 4, onPressed: onPressed,),
+          NavBarButton(
+            iconPath: 'assets/images/nav_icons/ShopIcon.svg',
+            width: 24,
+            height: 22,
+            index: 0,
+            onPressed: onPressed,
+          ),
+          NavBarButton(
+            iconPath: 'assets/images/nav_icons/BookVector.svg',
+            width: 27,
+            height: 23,
+            index: 1,
+            onPressed: onPressed,
+          ),
+          NavBarButton(
+            iconPath: 'assets/images/nav_icons/HomeVector.svg',
+            width: 29,
+            height: 30,
+            index: 2,
+            onPressed: onPressed,
+          ),
+          NavBarButton(
+            iconPath: 'assets/images/nav_icons/CalendarVector.svg',
+            width: 21,
+            height: 22,
+            index: 3,
+            onPressed: onPressed,
+          ),
+          NavBarButton(
+            iconPath: 'assets/images/nav_icons/ToDoListVector.svg',
+            width: 23,
+            height: 18,
+            index: 4,
+            onPressed: onPressed,
+          ),
         ],
       ),
     );
@@ -76,7 +128,12 @@ class NavBarButton extends StatelessWidget {
   final int index;
 
   NavBarButton(
-      {super.key, required this.iconPath, required this.width, required this.height, required this.index, required this.onPressed});
+      {super.key,
+      required this.iconPath,
+      required this.width,
+      required this.height,
+      required this.index,
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -84,11 +141,10 @@ class NavBarButton extends StatelessWidget {
       width: 43,
       height: 43,
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        boxShadow: [MyStyles.boxShadowBasic],
-        color: MyColors.tertiary,
-        border: MyStyles.borderAll1
-      ),
+          shape: BoxShape.circle,
+          boxShadow: [MyStyles.boxShadowBasic],
+          color: MyColors.tertiary,
+          border: MyStyles.borderAll1),
       child: IconButton(
         onPressed: () {
           print("Pressed NavBarButton");
@@ -96,14 +152,13 @@ class NavBarButton extends StatelessWidget {
         },
         icon: SvgPicture.asset(iconPath, width: width, height: height),
       ),
-      
     );
   }
 }
 
 class LevelBarWidget extends StatelessWidget {
   final int level;
-  final double exp;
+  final int exp;
   static const double maxWidth = 190.0;
   static const double height = 17.0;
 

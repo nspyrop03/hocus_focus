@@ -37,7 +37,7 @@ class DatabaseHelper {
     );
 
     await db.execute(
-      'CREATE TABLE profile(name TEXT PRIMARY KEY, exp INTEGER, coins INTEGER)'
+      'CREATE TABLE profile(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, exp INTEGER, coins INTEGER, cloak TEXT DEFAULT "cloak", hat TEXT DEFAULT "", wand TEXT DEFAULT "")'
     );
 
     // populate with items
@@ -141,6 +141,25 @@ class DatabaseHelper {
     return request[0]['coins'];
   }
 
+  Future<String> getSelectedCloakPath() async {
+    final db = await database;
+    final List<Map<String, dynamic>> request = await db.query('profile');
+    return "assets/images/wizard/${request[0]['cloak']}.svg";
+  }
+
+  Future<String> getSelectedHatPath() async {
+    final db = await database;
+    final List<Map<String, dynamic>> request = await db.query('profile');
+    return "assets/images/wizard/${request[0]['hat']}.svg";
+  }
+
+  Future<String> getSelectedWandPath() async {
+    final db = await database;
+    final List<Map<String, dynamic>> request = await db.query('profile');
+    print("Wand where are you? ${request[0]}");
+    return "assets/images/wizard/${request[0]['wand']}.svg";
+  }
+
   Future<void> insertItem(
       String name, String asset, String type, int cost) async {
     final db = await database;
@@ -185,6 +204,19 @@ class DatabaseHelper {
     );
   }
 
+  Future<void> selectItem(String item, String type) async {
+    final db = await database;
+    print("selecting $item of type $type");
+    db.update(
+      'profile', 
+      {
+        type: item
+      },
+      where: 'id = ?',
+      whereArgs: [1]
+    );
+  }
+
   Future<List<Map<String, dynamic>>> getTasks() async {
     final db = await database;
     //returns a list of maps where each map represents a task.
@@ -195,6 +227,11 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getItems() async {
     final db = await database;
     return await db.query('item');
+  }
+
+  Future<List<Map<String, dynamic>>> getProfiles() async {
+    final db = await database;
+    return await db.query('profile');
   }
 
   Future<List<String>> getItemAssetsOfType(String type) async {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hocus_focus/widgets/bar_widgets.dart';
 import 'package:hocus_focus/widgets/clock_widget.dart';
 import 'package:hocus_focus/widgets/home_widgets.dart';
-import 'package:hocus_focus/widgets/welcome_widgets.dart';
+import 'package:hocus_focus/widgets/wizard_widgets.dart';
 
 class HomePageLayout extends StatelessWidget {
   @override
@@ -23,7 +23,7 @@ class HomePageLayout extends StatelessWidget {
         SizedBox(
           height: 50,
         ),
-        WizardIconWidget(),
+        WizardHomeWidget(),
       ],
     );
   }

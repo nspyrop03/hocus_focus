@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/widgets/welcome_widgets.dart';
+import 'package:hocus_focus/widgets/wizard_widgets.dart';
 
 class WelcomePage extends StatefulWidget {
   @override
@@ -12,7 +13,28 @@ class _WelcomePageState extends State<WelcomePage> {
   final NameInputFullBoxWidget inputField = NameInputFullBoxWidget();
 
   String _formatPath(String path) {
-    return path.replaceAll("assets/images/wizard/", "").replaceAll(".svg", "");
+    return path.replaceAll("assets/images/items/", "").replaceAll(".svg", "");
+  }
+
+  Future<void> extraOnClick() async {
+    var dbh = DatabaseHelper();
+    await dbh.createNewProfile(inputField.inputField.nameController.text);
+    var cloak = _formatPath((await dbh.getItemAssetsOfType(
+        'cloak'))[_wizardIconKey.currentState?.currentCloakIndex ?? 0]);
+    var hat = _formatPath((await dbh.getItemAssetsOfType(
+        'hat'))[_wizardIconKey.currentState?.currentHatIndex ?? 0]);
+    var wand = _formatPath((await dbh.getItemAssetsOfType(
+        'wand'))[_wizardIconKey.currentState?.currentWandIndex ?? 0]);
+
+    await dbh.updateItemBought(cloak);
+    await dbh.updateItemBought(hat);
+    await dbh.updateItemBought(wand);
+
+    await dbh.selectItem(cloak, 'cloak');
+    await dbh.selectItem(hat, 'hat');
+    await dbh.selectItem(wand, 'wand');
+
+    print("Created new profile with items: $cloak, $hat, $wand!");
   }
 
   @override
@@ -71,21 +93,8 @@ class _WelcomePageState extends State<WelcomePage> {
               ),
               CreateButtonWidget(
                 text: 'Finish',
-                inputField:
-                    inputField.inputField.nameController,
-                extraOnClick: () async {
-                  var dbh = DatabaseHelper();
-                  await dbh.createNewProfile(inputField.inputField.nameController.text);
-                  var cloak = _formatPath((await dbh.getItemAssetsOfType('cloak'))[_wizardIconKey.currentState?.currentCloakIndex ?? 0]);
-                  var hat = _formatPath((await dbh.getItemAssetsOfType('hat'))[_wizardIconKey.currentState?.currentHatIndex ?? 0]);
-                  var wand = _formatPath((await dbh.getItemAssetsOfType('wand'))[_wizardIconKey.currentState?.currentWandIndex ?? 0]);
-
-                  await dbh.updateItemBought(cloak);
-                  await dbh.updateItemBought(hat);
-                  await dbh.updateItemBought(wand);
-                  
-                  print("Created new profile with items!");
-                },
+                inputField: inputField.inputField.nameController,
+                extraOnClick: extraOnClick,
               ),
             ],
           ),
