@@ -39,6 +39,7 @@ class MainPageState extends State<MainPage> {
 
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

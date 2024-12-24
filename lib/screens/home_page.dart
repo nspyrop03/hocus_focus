@@ -4,6 +4,7 @@ import 'package:hocus_focus/widgets/clock_widget.dart';
 import 'package:hocus_focus/widgets/home_widgets.dart';
 import 'package:hocus_focus/widgets/wizard_widgets.dart';
 import '../widgets/welcome_widgets.dart' as welcome;
+import '../cache.dart' as cache; 
 
 class HomePageLayout extends StatelessWidget {
   @override
@@ -22,8 +23,9 @@ class HomePageLayout extends StatelessWidget {
               welcome.mainPageKey.currentState?.onItemTapped(5);
             },
             child: ClockProgressWidget(
-              seconds: 0,
-              isStopwatch: true,
+              seconds: cache.currentClock.value?.elapsedTime ?? 0,
+              maxRecordTime: cache.currentClock.value?.maxTime ?? 0,
+              isStopwatch: cache.currentClock.value?.isStopwatch ?? false,
             )),
         SizedBox(
           height: 50,
@@ -52,10 +54,10 @@ class HomePage extends StatelessWidget {
               SizedBox(
                 height: 50,
               ),
-              ClockProgressWidget(
+              /*ClockProgressWidget(
                 seconds: 120,
                 isStopwatch: true,
-              ),
+              ),*/
               SizedBox(
                 height: 50,
               ),

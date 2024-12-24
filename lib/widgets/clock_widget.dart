@@ -6,8 +6,9 @@ import 'package:hocus_focus/styles/styles.dart';
 
 class ClockProgressWidget extends StatelessWidget {
   final int seconds;
+  final int maxRecordTime;
   final bool isStopwatch;
-  const ClockProgressWidget({super.key, required this.seconds, required this.isStopwatch});
+  const ClockProgressWidget({super.key, required this.seconds, required this.maxRecordTime, required this.isStopwatch});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class ClockProgressWidget extends StatelessWidget {
         border: MyStyles.borderAll1,
       ),
       child: //seconds > 0 
-      /*?*/ GradientCircularProgressIndicator(maxRecordTime: seconds, isStopwatch: isStopwatch,)
+      /*?*/ GradientCircularProgressIndicator(start: seconds, maxRecordTime: maxRecordTime, isStopwatch: isStopwatch,)
       /*: Container(
         width: 220,
         height: 220,
@@ -35,8 +36,9 @@ class ClockProgressWidget extends StatelessWidget {
 class GradientCircularProgressIndicator extends StatefulWidget {
   final int maxRecordTime;
   final bool isStopwatch;
+  final int start;
 
-  const GradientCircularProgressIndicator({super.key, required this.maxRecordTime, required this.isStopwatch});
+  const GradientCircularProgressIndicator({super.key, required this.start, required this.maxRecordTime, required this.isStopwatch});
 
   @override
   State<GradientCircularProgressIndicator> createState() =>
@@ -45,10 +47,11 @@ class GradientCircularProgressIndicator extends StatefulWidget {
 
 class _GradientCircularProgressIndicatorState
     extends State<GradientCircularProgressIndicator> {
-  final ValueNotifier<int> _timerVideo = ValueNotifier<int>(0);
+  late final ValueNotifier<int> _timerVideo;
 
   @override
   void initState() {
+    _timerVideo = ValueNotifier<int>(widget.start);
     tick();
     super.initState();
   }
@@ -56,6 +59,7 @@ class _GradientCircularProgressIndicatorState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(child: progressIndicatorWidget()),
     );
   }
