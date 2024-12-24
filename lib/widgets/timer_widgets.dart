@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
+import 'package:provider/provider.dart';
 import '../cache.dart' as cache;
 
 class TimerButtonWidget extends StatelessWidget {
   final bool isTimer;
 
   const TimerButtonWidget({super.key, required this.isTimer});
-
+  /*
   void _addTimer(String timer, bool done) async {
     int min = 0;
     int sec = 10; // default
@@ -18,11 +19,13 @@ class TimerButtonWidget extends StatelessWidget {
       print("Error trying to parse input: $err");
     }
     int maxTime = min * 60 + sec;
-    cache.currentClock.value = cache.LoadClock(maxTime, 0, !isTimer);
-  }
+    cache.currentClock.value =
+        cache.LoadClock(maxTime, 0, !isTimer, true); // stopped at the start
+  }*/
 
   @override
   Widget build(BuildContext context) {
+    final timerModel = Provider.of<cache.TimerModel>(context);
     return SizedBox(
       width: 158,
       height: 56,
@@ -37,7 +40,7 @@ class TimerButtonWidget extends StatelessWidget {
           showDialog(
               context: context,
               builder: (context) {
-                return AddTimerDialog(onAddTimer: _addTimer, isTimer: isTimer);
+                return AddTimerDialog(onAddTimer: () {timerModel.resetTimer();}, isTimer: isTimer);
               });
         },
         child: Row(
@@ -71,9 +74,22 @@ class _StartStopButtonWidgetState extends State<StartStopButtonWidget> {
     super.initState();
     isPaused = widget.isPaused;
   }
-
+  /*
+  void _toggleStartStop() {
+    final currentClock = cache.currentClock.value;
+    if (currentClock != null) {
+      cache.currentClock.value = cache.LoadClock(
+          currentClock.maxTime,
+          currentClock.elapsedTime,
+          currentClock.isStopwatch,
+          !currentClock.isStopped);
+      //cache.currentClock.value?.updateClock();
+    }
+  }
+  */
   @override
   Widget build(BuildContext context) {
+    final timerModel = Provider.of<cache.TimerModel>(context);
     return Column(
       children: [
         Container(
@@ -86,7 +102,17 @@ class _StartStopButtonWidgetState extends State<StartStopButtonWidget> {
           child: IconButton(
               onPressed: () {
                 setState(() {
+                  //if (cache.currentClock.value == null) {
+                  //  return;
+                  //}
                   isPaused = !isPaused;
+                  if(isPaused) {
+                    timerModel.stopTimer();
+                  } else {
+                    timerModel.startTimer();
+                  }
+                  //cache.currentClock.value?.isStopped = isPaused;
+                  //_toggleStartStop();
                 });
               },
               style: IconButton.styleFrom(
@@ -150,10 +176,11 @@ class _QuitButtonWidgetState extends State<QuitButtonWidget> {
 }
 
 class AddTimerDialog extends StatefulWidget {
-  final Function(String, bool) onAddTimer;
+  final VoidCallback onAddTimer;
   final bool isTimer;
 
-  const AddTimerDialog({super.key, required this.onAddTimer, required this.isTimer});
+  const AddTimerDialog(
+      {super.key, required this.onAddTimer, required this.isTimer});
 
   @override
   _AddTimerDialogState createState() => _AddTimerDialogState();
@@ -161,7 +188,7 @@ class AddTimerDialog extends StatefulWidget {
 
 class _AddTimerDialogState extends State<AddTimerDialog> {
   final TextEditingController _timerController = TextEditingController();
-  bool _isDone = false;
+  //bool _isDone = false;
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +221,8 @@ class _AddTimerDialogState extends State<AddTimerDialog> {
         TextButton(
           onPressed: () {
             if (_timerController.text.isNotEmpty) {
-              widget.onAddTimer(_timerController.text, _isDone);
+              //widget.onAddTimer(_timerController.text, _isDone);
+              widget.onAddTimer();
               Navigator.of(context).pop();
             }
           },

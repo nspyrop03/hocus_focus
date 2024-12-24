@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hocus_focus/widgets/clock_widget.dart';
+import 'package:hocus_focus/widgets/new_clock.dart';
 import 'package:hocus_focus/widgets/timer_widgets.dart';
+import 'package:provider/provider.dart';
 import '../cache.dart' as cache;
 
 class TimerPageLayout extends StatefulWidget {
@@ -9,7 +10,8 @@ class TimerPageLayout extends StatefulWidget {
 }
 
 class _TimerPageLayoutState extends State<TimerPageLayout> {
-  Key _progressIndicatorKey = UniqueKey();
+  //Key _progressIndicatorKey = UniqueKey();
+  /*final GlobalKey<NewClockWidgetState> newClockWidgetKey = GlobalKey<NewClockWidgetState>();
 
   @override
   void initState() {
@@ -25,13 +27,15 @@ class _TimerPageLayoutState extends State<TimerPageLayout> {
 
   void _onClockChanged() {
     setState(() {
-      cache.currentClock.value?.updateClock();
-      _progressIndicatorKey = UniqueKey();
+      //cache.currentClock.value?.updateClock();
+      //_progressIndicatorKey = UniqueKey();
+      newClockWidgetKey.currentState?.updateFromCache();
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
+    final timerModel = Provider.of<cache.TimerModel>(context);
     return Column(
       children: [
         SizedBox(
@@ -50,12 +54,16 @@ class _TimerPageLayoutState extends State<TimerPageLayout> {
         SizedBox(
           height: 50,
         ),
+        /*
         ClockProgressWidget(
           key: _progressIndicatorKey,
+          isStopped: cache.currentClock.value?.isStopped ?? false,
           start: cache.currentClock.value?.elapsedTime ?? 0,
           maxRecordTime: cache.currentClock.value?.maxTime ?? 0,
           isStopwatch: cache.currentClock.value?.isStopwatch ?? false,
-        ),
+        ),*/
+        //NewClockWidget(key: newClockWidgetKey),
+        TimerModelClockWidget(),
         SizedBox(
           height: 50,
         ),
@@ -64,7 +72,7 @@ class _TimerPageLayoutState extends State<TimerPageLayout> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              StartStopButtonWidget(isPaused: true),
+              StartStopButtonWidget(isPaused: timerModel.isStopped()),
               QuitButtonWidget(),
             ],
           ),

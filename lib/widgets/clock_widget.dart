@@ -4,16 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
 import '../cache.dart' as cache;
-
+/*
 class ClockProgressWidget extends StatelessWidget {
   final int start;
   final int maxRecordTime;
   final bool isStopwatch;
+  final bool isStopped;
   const ClockProgressWidget(
       {super.key,
       required this.start,
       required this.maxRecordTime,
-      required this.isStopwatch});
+      required this.isStopwatch,
+      required this.isStopped});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class ClockProgressWidget extends StatelessWidget {
           border: MyStyles.borderAll1,
         ),
         child: GradientCircularProgressIndicator(
+          isStopped: isStopped,
           start: start,
           maxRecordTime: maxRecordTime,
           isStopwatch: isStopwatch,
@@ -35,12 +38,14 @@ class GradientCircularProgressIndicator extends StatefulWidget {
   final int maxRecordTime;
   final bool isStopwatch;
   final int start;
+  final bool isStopped;
 
   const GradientCircularProgressIndicator(
       {super.key,
       required this.start,
       required this.maxRecordTime,
-      required this.isStopwatch});
+      required this.isStopwatch,
+      required this.isStopped});
 
   @override
   State<GradientCircularProgressIndicator> createState() =>
@@ -105,18 +110,20 @@ class _GradientCircularProgressIndicatorState
   }
 
   void tick() {
-    Timer.periodic(const Duration(seconds: 1), (Timer t) {
-      if (_timerVideo.value != widget.maxRecordTime) {
-        _timerVideo.value = _timerVideo.value + 1;
-      } else {
-        t.cancel();
-        if (cache.currentClock.value != null) {
-          print("Cancelling Timer because it reached maxRecordTime!");
-          cache.resetClockAndGiveReward(
-              widget.maxRecordTime ~/ 2, widget.maxRecordTime ~/ 2);
+    if (!widget.isStopped) {
+      Timer.periodic(const Duration(seconds: 1), (Timer t) {
+        if (_timerVideo.value != widget.maxRecordTime) {
+          _timerVideo.value = _timerVideo.value + 1;
+        } else {
+          t.cancel();
+          if (cache.currentClock.value != null) {
+            print("Cancelling Timer because it reached maxRecordTime!");
+            cache.resetClockAndGiveReward(
+                widget.maxRecordTime ~/ 2, widget.maxRecordTime ~/ 2);
+          }
         }
-      }
-    });
+      });
+    }
   }
 }
 
@@ -179,3 +186,4 @@ class CircularPaint extends CustomPainter {
     return true;
   }
 }
+*/

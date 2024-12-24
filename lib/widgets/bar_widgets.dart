@@ -150,7 +150,7 @@ class NavBarButton extends StatelessWidget {
         onPressed: () {
           print("Pressed NavBarButton");
           onPressed(index);
-          cache.currentClock.value?.updateClock();
+          //cache.currentClock.value?.updateClock();
         },
         icon: SvgPicture.asset(iconPath, width: width, height: height),
       ),
