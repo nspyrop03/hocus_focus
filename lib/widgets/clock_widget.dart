@@ -3,24 +3,31 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
+import '../cache.dart' as cache;
 
 class ClockProgressWidget extends StatelessWidget {
   final int start;
   final int maxRecordTime;
   final bool isStopwatch;
-  const ClockProgressWidget({super.key, required this.start, required this.maxRecordTime, required this.isStopwatch});
+  const ClockProgressWidget(
+      {super.key,
+      required this.start,
+      required this.maxRecordTime,
+      required this.isStopwatch});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 220,
-      height: 220,
-      decoration: BoxDecoration(
-        border: MyStyles.borderAll1,
-      ),
-      child: GradientCircularProgressIndicator(start: start, maxRecordTime: maxRecordTime, isStopwatch: isStopwatch,)
-      
-    );
+        width: 220,
+        height: 220,
+        decoration: BoxDecoration(
+          border: MyStyles.borderAll1,
+        ),
+        child: GradientCircularProgressIndicator(
+          start: start,
+          maxRecordTime: maxRecordTime,
+          isStopwatch: isStopwatch,
+        ));
   }
 }
 
@@ -29,7 +36,11 @@ class GradientCircularProgressIndicator extends StatefulWidget {
   final bool isStopwatch;
   final int start;
 
-  const GradientCircularProgressIndicator({super.key, required this.start, required this.maxRecordTime, required this.isStopwatch});
+  const GradientCircularProgressIndicator(
+      {super.key,
+      required this.start,
+      required this.maxRecordTime,
+      required this.isStopwatch});
 
   @override
   State<GradientCircularProgressIndicator> createState() =>
@@ -60,7 +71,8 @@ class _GradientCircularProgressIndicatorState
     return ValueListenableBuilder(
       valueListenable: _timerVideo,
       builder: (BuildContext context, int values, Widget? child) {
-        double? per = (double.parse((values / widget.maxRecordTime).toString()));
+        double? per =
+            (double.parse((values / widget.maxRecordTime).toString()));
         return CustomPaint(
           painter: CircularPaint(
             progressValue: per,
@@ -80,9 +92,9 @@ class _GradientCircularProgressIndicatorState
               radius: 110,
               backgroundColor: Colors.transparent,
               child: Text(
-                widget.isStopwatch 
-                ? "${_timerVideo.value~/60}:${_timerVideo.value%60<10 ? '0' : ''}${_timerVideo.value%60}"
-                : "${(widget.maxRecordTime - _timerVideo.value)~/60}:${(widget.maxRecordTime - _timerVideo.value)%60<10 ? '0' : ''}${(widget.maxRecordTime - _timerVideo.value)%60}",
+                widget.isStopwatch
+                    ? "${_timerVideo.value ~/ 60}:${_timerVideo.value % 60 < 10 ? '0' : ''}${_timerVideo.value % 60}"
+                    : "${(widget.maxRecordTime - _timerVideo.value) ~/ 60}:${(widget.maxRecordTime - _timerVideo.value) % 60 < 10 ? '0' : ''}${(widget.maxRecordTime - _timerVideo.value) % 60}",
                 style: MyStyles.magic40,
               ),
             ),
@@ -98,6 +110,11 @@ class _GradientCircularProgressIndicatorState
         _timerVideo.value = _timerVideo.value + 1;
       } else {
         t.cancel();
+        if (cache.currentClock.value != null) {
+          print("Cancelling Timer because it reached maxRecordTime!");
+          cache.resetClockAndGiveReward(
+              widget.maxRecordTime ~/ 2, widget.maxRecordTime ~/ 2);
+        }
       }
     });
   }

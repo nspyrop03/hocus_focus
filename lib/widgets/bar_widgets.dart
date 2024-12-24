@@ -46,7 +46,7 @@ class TopBarWidget extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: LevelBarWidget(
-                        level: (snapshot.data['exp'] ~/ 10) + 1,
+                        level: cache.getLevel(snapshot.data['exp']),//(snapshot.data['exp'] ~/ 100) + 1,
                         exp: snapshot.data['exp']),
                   ),
                   Padding(
@@ -188,7 +188,7 @@ class LevelBarWidget extends StatelessWidget {
         ),
         Container(
           // Level bar foreground
-          width: maxWidth * exp / (level * 10),
+          width: maxWidth * cache.getLevelPercentage(exp), //maxWidth * (exp) / (level * 100),
           height: height,
           decoration: BoxDecoration(
             borderRadius: MyStyles.roundBox8,

@@ -217,6 +217,32 @@ class DatabaseHelper {
     );
   }
 
+  Future<void> addProfileExp(int exp) async {
+    final db = await database;
+    final List<Map<String, dynamic>> request = await db.query('profile');
+    db.update(
+      'profile',
+      {
+        'exp': request[0]['exp'] + exp
+      },
+      where: 'id = ?',
+      whereArgs: [1]
+    );
+  }
+
+  Future<void> addProfileCoins(int coins) async {
+    final db = await database;
+    final List<Map<String, dynamic>> request = await db.query('profile');
+    db.update(
+      'profile',
+      {
+        'coins': request[0]['coins'] + coins
+      },
+      where: 'id = ?',
+      whereArgs: [1]
+    );
+  }
+
   Future<List<Map<String, dynamic>>> getTasks() async {
     final db = await database;
     //returns a list of maps where each map represents a task.
