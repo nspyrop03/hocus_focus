@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
 
-
 class InputtextfieldWidget extends StatelessWidget {
   final String hintText; // Parameter for the hint text
   final TextEditingController? controller; // Optional controller for text input
@@ -325,7 +324,7 @@ class EventdescriptioninputWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Figma Flutter Generator EventinputWidget - INSTANCE
-    return Container(
+    return SizedBox(
         width: 385,
         height: 100,
         child: Stack(children: <Widget>[
@@ -334,14 +333,9 @@ class EventdescriptioninputWidget extends StatelessWidget {
               left: 0,
               child: Container(
                   width: 385,
-                  height: 100,
+                  height: 90,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16),
-                      bottomLeft: Radius.circular(16),
-                      bottomRight: Radius.circular(16),
-                    ),
+                    borderRadius: MyStyles.roundBox16,
                     boxShadow: [MyStyles.boxShadowBasic],
                     color: MyColors.primary,
                   ))),

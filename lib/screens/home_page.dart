@@ -3,6 +3,7 @@ import 'package:hocus_focus/widgets/home_widgets.dart';
 import 'package:hocus_focus/widgets/new_clock.dart';
 import 'package:hocus_focus/widgets/wizard_widgets.dart';
 import '../widgets/welcome_widgets.dart' as welcome;
+import '../global.dart' as global;
 
 class HomePageLayout extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _HomePageLayoutState extends State<HomePageLayout> {
         ),
         GestureDetector(
             onTap: () {
-              welcome.mainPageKey.currentState?.onItemTapped(5);
+              welcome.mainPageKey.currentState?.onItemTapped(global.timerIndex);
             },
             child: TimerModelClockWidget()),
         SizedBox(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hocus_focus/screens/calendar_page.dart';
 import 'package:hocus_focus/screens/home_page.dart';
+import 'package:hocus_focus/screens/set_tasks_page.dart';
 import 'package:hocus_focus/screens/task_list_page.dart';
 import 'package:hocus_focus/screens/timer_page.dart';
 import 'package:hocus_focus/widgets/bar_widgets.dart';
@@ -19,11 +21,12 @@ class MainPageState extends State<MainPage> {
     HomePageLayout(), // 0: should be shop page
     HomePageLayout(), // 1: should be book page
     HomePageLayout(), // 2: home
-    HomePageLayout(), // 3: should be calendar page
+    CalendarPageLayout(), // 3: should be calendar page
     TaskListPageLayout(), // 4: tasks list
     
     // Extra pages!
     TimerPageLayout(), // 5: timer page
+    SetTasksPageLayout(), // 6: set tasks page
   ];
 
   void onItemTapped(int index) {
@@ -39,7 +42,7 @@ class MainPageState extends State<MainPage> {
 
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

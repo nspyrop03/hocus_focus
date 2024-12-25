@@ -15,36 +15,41 @@ class _TimerPageLayoutState extends State<TimerPageLayout> {
     final timerModel = Provider.of<cache.TimerModel>(context);
     return Column(
       children: [
-        SizedBox(
-          height: 50,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Expanded(
+            child: ListView(
           children: [
-            TimerButtonWidget(isTimer: true),
             SizedBox(
-              width: 20,
+              height: 50,
             ),
-            TimerButtonWidget(isTimer: false),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TimerButtonWidget(isTimer: true),
+                SizedBox(
+                  width: 20,
+                ),
+                TimerButtonWidget(isTimer: false),
+              ],
+            ),
+            SizedBox(
+              height: 50,
+            ),
+            TimerModelClockWidget(),
+            SizedBox(
+              height: 50,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 50),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  StartStopButtonWidget(isPaused: timerModel.isStopped()),
+                  QuitButtonWidget(),
+                ],
+              ),
+            ),
           ],
-        ),
-        SizedBox(
-          height: 50,
-        ),
-        TimerModelClockWidget(),
-        SizedBox(
-          height: 50,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              StartStopButtonWidget(isPaused: timerModel.isStopped()),
-              QuitButtonWidget(),
-            ],
-          ),
-        ),
+        )),
       ],
     );
   }
