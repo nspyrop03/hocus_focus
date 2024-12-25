@@ -3,7 +3,9 @@ library cache;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:hocus_focus/main.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
+import 'package:provider/provider.dart';
 
 class TimerModel extends ChangeNotifier {
   int _seconds = 0;
@@ -25,7 +27,7 @@ class TimerModel extends ChangeNotifier {
       _seconds++;
       notifyListeners();
 
-      if(_seconds >= _maxTime) {
+      if (_seconds >= _maxTime) {
         giveReward(_seconds ~/ 2, _seconds ~/ 2);
         stopTimer();
         print("[TimeModel] Timer stopped");
@@ -50,6 +52,12 @@ class TimerModel extends ChangeNotifier {
   }
 }
 
+class RewardNotifier extends ChangeNotifier {
+  void rewardGiven() {
+    notifyListeners();
+  }
+}
+
 void addExpAndCoins(int exp, int coins) async {
   // Add experience and coins to the user
   var dbh = DatabaseHelper();
@@ -57,10 +65,11 @@ void addExpAndCoins(int exp, int coins) async {
   await dbh.addProfileCoins(coins);
 }
 
-
 void giveReward(int exp, int coins) {
   addExpAndCoins(exp, coins); // give the reward
-  print("[Cache] Reward given ($exp exp, $coins coins)");
+  BuildContext context = navigatorKey.currentContext!;
+  Provider.of<RewardNotifier>(context, listen: false).rewardGiven();
+  print("[Cache] Reward given ($exp exp, $coins coins) and listeners notified");
 }
 
 const baseExp = 100;
@@ -88,8 +97,7 @@ double getLevelPercentage(int exp) {
     int expForPrevLevel = getExpForNextLevel(level - 1);
     print(
         "Level: $level, exp: $exp, expForLevel: $expForLevel, expForPrevLevel: $expForPrevLevel");
-    final double percentage =
-        (exp - expForPrevLevel) / (expForLevel - expForPrevLevel);
+    final double percentage = (exp - expForPrevLevel) / (expForLevel);
     print("Percentage: $percentage");
     return percentage;
   } else {

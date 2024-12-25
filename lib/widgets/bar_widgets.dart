@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
+import 'package:provider/provider.dart';
 import '../cache.dart' as cache;
 
 class TopBarWidget extends StatelessWidget {
@@ -16,48 +17,51 @@ class TopBarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: waitForData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return Container(
-              height: 55,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                borderRadius: MyStyles.topBox,
-                boxShadow: [MyStyles.boxShadowBasic],
-                color: MyColors.primary,
-                border: MyStyles.borderAll1,
-              ),
-            );
-          } else {
-            return Container(
-              width: MediaQuery.of(context).size.width,
-              height: 55,
-              decoration: BoxDecoration(
-                borderRadius: MyStyles.topBox,
-                boxShadow: [MyStyles.boxShadowBasic],
-                color: MyColors.primary,
-                border: MyStyles.borderAll1,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: LevelBarWidget(
-                        level: cache.getLevel(snapshot.data['exp']),//(snapshot.data['exp'] ~/ 100) + 1,
-                        exp: snapshot.data['exp']),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: CoinsWidget(coins: snapshot.data['coins']),
-                  ),
-                ],
-              ),
-            );
-          }
-        });
+    return Consumer<cache.RewardNotifier>(builder: (context, notifier, child) {
+      return FutureBuilder(
+          future: waitForData(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return Container(
+                height: 55,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  borderRadius: MyStyles.topBox,
+                  boxShadow: [MyStyles.boxShadowBasic],
+                  color: MyColors.primary,
+                  border: MyStyles.borderAll1,
+                ),
+              );
+            } else {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                height: 55,
+                decoration: BoxDecoration(
+                  borderRadius: MyStyles.topBox,
+                  boxShadow: [MyStyles.boxShadowBasic],
+                  color: MyColors.primary,
+                  border: MyStyles.borderAll1,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: LevelBarWidget(
+                          level: cache.getLevel(snapshot.data[
+                              'exp']), //(snapshot.data['exp'] ~/ 100) + 1,
+                          exp: snapshot.data['exp']),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: CoinsWidget(coins: snapshot.data['coins']),
+                    ),
+                  ],
+                ),
+              );
+            }
+          });
+    });
   }
 }
 
@@ -188,7 +192,8 @@ class LevelBarWidget extends StatelessWidget {
         ),
         Container(
           // Level bar foreground
-          width: maxWidth * cache.getLevelPercentage(exp), //maxWidth * (exp) / (level * 100),
+          width: maxWidth *
+              cache.getLevelPercentage(exp), //maxWidth * (exp) / (level * 100),
           height: height,
           decoration: BoxDecoration(
             borderRadius: MyStyles.roundBox8,

@@ -20,7 +20,7 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxHeight: 400),
+      constraints: BoxConstraints(maxHeight: 350),
       child: TableCalendar(
         firstDay: DateTime(2024),
         lastDay: DateTime(2026),
@@ -137,10 +137,18 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
 class EventdisplayWidget extends StatelessWidget {
   final String eventName;
   final String eventDate;
+  final String description;
+  final int eventId;
+  final VoidCallback onDelete;
+  final VoidCallback onFinish;
 
    EventdisplayWidget({
-    this.eventName = 'Default Event Name', // Default event name
-    this.eventDate = '15/12/2024',         // Default event date
+    required this.eventId,
+    required this.eventName,
+    required this.eventDate,
+    required this.description,
+    required this.onDelete,
+    required this.onFinish,
   });
 
   @override
@@ -168,14 +176,10 @@ class EventdisplayWidget extends StatelessWidget {
             top: 7,
             left: 5,
             child: Text(
-              eventDate, // Use dynamic event date
+              '$eventDate ($eventName)', // Use dynamic event date
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: MyStyles.magic14.copyWith(
                 color: MyColors.details, // Replace with MyColors.details
-                fontFamily: 'AvolisseDEMO',
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                height: 1,
               ),
             ),
           ),
@@ -183,20 +187,13 @@ class EventdisplayWidget extends StatelessWidget {
             top: 45,
             left: 318,
             child: GestureDetector(
-              onTap: () {
-                // Handle Finish action
-                print('Finish tapped for $eventName');
-              },
+              onTap: onFinish,
               child: Text(
                 'Finish',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: MyStyles.magic14.copyWith(
                   color: MyColors.accept, // Replace with MyColors.accept
-                  fontFamily: 'AvolisseDEMO',
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                  height: 1,
-                ),
+                )
               ),
             ),
           ),
@@ -204,20 +201,13 @@ class EventdisplayWidget extends StatelessWidget {
             top: 4,
             left: 317,
             child: GestureDetector(
-              onTap: () {
-                // Handle Delete action
-                print('Delete tapped for $eventName');
-              },
+              onTap: onDelete,
               child: Text(
                 'Delete',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: MyStyles.magic14.copyWith(
                   color: MyColors.delete, // Replace with MyColors.delete
-                  fontFamily: 'AvolisseDEMO',
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                  height: 1,
-                ),
+                )
               ),
             ),
           ),
@@ -225,7 +215,7 @@ class EventdisplayWidget extends StatelessWidget {
             top: 22,
             left: 5,
             child: Text(
-              eventName, // Use dynamic event name
+              description, // Use dynamic event name
               textAlign: TextAlign.center,
               style: MyStyles.magic14 // Replace with MyStyles.magic14
             ),

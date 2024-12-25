@@ -1,51 +1,88 @@
 import 'package:flutter/material.dart';
-import 'package:hocus_focus/screens/set_tasks_page.dart';
-import 'package:hocus_focus/widgets/bar_widgets.dart';
+import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/widgets/calendar_widgets.dart';
 import '../widgets/welcome_widgets.dart' as welcome;
 import '../global.dart' as global;
+import '../cache.dart' as cache;
 
-class CalendarPageLayout extends StatelessWidget {
+class CalendarPageLayout extends StatefulWidget {
+  @override
+  State<CalendarPageLayout> createState() => _CalendarPageLayoutState();
+}
+
+class _CalendarPageLayoutState extends State<CalendarPageLayout> {
+  Future<void> _loadEvents() async {
+    await DatabaseHelper().getEvents();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Column(children: [
+      TableBasicsExample(),
+      Expanded(
+          child: FutureBuilder(
+        future: DatabaseHelper().getEvents(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              itemCount: snapshot.data?.length ?? 0,
+              itemBuilder: (context, index) {
+                return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 0.0),
+                    child: Align(
+                        alignment: Alignment.center,
+                        child: EventdisplayWidget(
+                          eventId: snapshot.data?[index]['id'],
+                          eventName: snapshot.data?[index]['name'],
+                          description: snapshot.data?[index]['description'],
+                          eventDate: snapshot.data?[index]['end_date'],
+                          onDelete: () async {
+                            await DatabaseHelper()
+                                .deleteEvent(snapshot.data?[index]['id']);
+                            _loadEvents();
+                          },
+                          onFinish: () async {
+                            cache.giveReward(
+                                global.baseEventExp *
+                                    (snapshot.data?[index]['difficulty']
+                                        as int),
+                                global.baseEventCoins *
+                                    (snapshot.data?[index]['difficulty']
+                                        as int));
+                            await DatabaseHelper()
+                                .deleteEvent(snapshot.data?[index]['id']);
+                            _loadEvents();
+                          },
+                        )));
+              },
+            );
+          } else {
+            return CircularProgressIndicator();
+          }
+        },
+      )),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          SizedBox(height: 10),
-          Flexible(
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: ListView(
-                    padding: EdgeInsets.all(10.0),
-                    children: [
-                      TableBasicsExample(),
-                      EventdisplayWidget(),
-                      SizedBox(height: 15),
-                      EventdisplayWidget(),
-                      SizedBox(height: 15),
-                      EventdisplayWidget(),
-                    ],
-                  ),
-                ),
-                // HoverplusbuttonWidget positioned at the top-right corner
-                Positioned(
-                  top: 300,
-                  right: 10,
-                  child: HoverplusbuttonWidget(
-                    onTap: () {
-                      // Navigate to Event Details Page
-                      welcome.mainPageKey.currentState?.onItemTapped(global.setTasksIndex);
-                    },
-                  ),
-                ),
-              ],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: HoverplusbuttonWidget(
+              onTap: () {
+                // Navigate to Event Details Page
+                welcome.mainPageKey.currentState
+                    ?.onItemTapped(global.setTasksIndex);
+              },
             ),
           ),
         ],
-    );
+      ),
+    ]);
   }
 }
 
+/*
 class CalendarPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -92,7 +129,7 @@ class CalendarPage extends StatelessWidget {
     );
   }
 }
-
+*/
 
 /*
 

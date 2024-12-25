@@ -40,6 +40,10 @@ class DatabaseHelper {
       'CREATE TABLE profile(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, exp INTEGER, coins INTEGER, cloak TEXT DEFAULT "cloak", hat TEXT DEFAULT "", wand TEXT DEFAULT "")'
     );
 
+    await db.execute(
+      'CREATE TABLE event(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, start_date TEXT, end_date TEXT, difficulty INTEGER)'
+    );
+
     // populate with items
     await db.insert('item', {
       'name': 'purple_hat',
@@ -121,6 +125,25 @@ class DatabaseHelper {
         'coins': 0
       },
       conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> createNewEvent(String name, String description, String startDate, String endDate, int difficulty) async {
+    final db = await database;
+    db.insert(
+      'event',
+      {
+        'name': name,
+        'description': description,
+        'start_date': startDate,
+        'end_date': endDate,
+        'difficulty': difficulty
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace);
+  }
+
+  Future<void> deleteEvent(int id) async {
+    final db = await database;
+    db.delete('event', where: 'id = ?', whereArgs: [id]);
   }
 
   Future<String> getProfileName() async {
@@ -248,6 +271,12 @@ class DatabaseHelper {
     //returns a list of maps where each map represents a task.
     //like [{id: 1, title: 'Task 1', status: 1}, {id: 2, title: 'Task 2', status: 0}]
     return await db.query('task');
+  }
+
+  // function to get all events from database
+  Future<List<Map<String, dynamic>>> getEvents() async {
+    final db = await database;
+    return await db.query('event');
   }
 
   Future<List<Map<String, dynamic>>> getItems() async {

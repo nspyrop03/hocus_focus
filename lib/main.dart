@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/cache.dart';
-import 'package:hocus_focus/screens/calendar_page.dart';
-import 'package:hocus_focus/screens/main_page.dart';
 import 'package:hocus_focus/screens/welcome_page.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/styles/colors.dart';
-import 'package:hocus_focus/screens/spellbook_page.dart';
-import "package:hocus_focus/screens/shop_page.dart";
 import 'package:provider/provider.dart';
+
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseHelper().database;
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => TimerModel(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => TimerModel()),
+        ChangeNotifierProvider(create: (context) => RewardNotifier()),
+      ],
       child: MyApp(),
     ),
   );
@@ -27,13 +28,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Hocus Focus',
-      theme: ThemeData(
-        scaffoldBackgroundColor: MyColors.background,
-        useMaterial3: true,
-      ),
-      home: WelcomePage() //MainPage()
-    );
+      navigatorKey: navigatorKey,
+        title: 'Hocus Focus',
+        theme: ThemeData(
+          scaffoldBackgroundColor: MyColors.background,
+          useMaterial3: true,
+        ),
+        home: WelcomePage() //MainPage()
+        );
   }
 }
-

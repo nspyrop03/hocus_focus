@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
@@ -28,7 +29,8 @@ class InputtextfieldWidget extends StatelessWidget {
           Stack(
             children: [
               Container(
-                width: width - 30, // Adjust the width to match the container minus padding
+                width: width -
+                    30, // Adjust the width to match the container minus padding
                 height: height,
                 decoration: BoxDecoration(
                   borderRadius: MyStyles.roundBox8,
@@ -59,6 +61,13 @@ class InputtextfieldWidget extends StatelessWidget {
 }
 
 class EventInputWidget extends StatelessWidget {
+
+  final TextEditingController nameController;
+  final TextEditingController startDateController;
+  final TextEditingController endDateController;
+
+  EventInputWidget({required this.nameController, required this.startDateController, required this.endDateController});
+
   @override
   Widget build(BuildContext context) {
     // Figma Flutter Generator EventbasicsinputWidget - INSTANCE
@@ -97,7 +106,12 @@ class EventInputWidget extends StatelessWidget {
                       style: MyStyles.magic14,
                     ),
                     SizedBox(width: 15),
-                    InputtextfieldWidget(hintText: "DD/MM/YYYY", width: 200, height: 29,),
+                    InputtextfieldWidget(
+                      controller: endDateController,
+                      hintText: "DD/MM/YYYY",
+                      width: 200,
+                      height: 29,
+                    ),
                   ],
                 ),
               )),
@@ -113,7 +127,12 @@ class EventInputWidget extends StatelessWidget {
                     Text('Start Date:',
                         textAlign: TextAlign.center, style: MyStyles.magic14),
                     SizedBox(width: 2),
-                    InputtextfieldWidget(hintText: "DD/MM/YYYY",  width: 200, height: 29,),
+                    InputtextfieldWidget(
+                      controller: startDateController,
+                      hintText: "DD/MM/YYYY",
+                      width: 200,
+                      height: 29,
+                    ),
                   ],
                 ),
               )),
@@ -129,24 +148,37 @@ class EventInputWidget extends StatelessWidget {
                     Text('Name:',
                         textAlign: TextAlign.center, style: MyStyles.magic14),
                     SizedBox(width: 38),
-                    InputtextfieldWidget(hintText: "Name task",)
+                    InputtextfieldWidget(
+                      controller: nameController,
+                      hintText: "Name task",
+                    )
                   ],
                 ),
               )),
         ]));
   }
 }
-/**/ 
+/**/
 
 class DifficultyselectionfullWidget extends StatefulWidget {
+  final Key? key;
+
+  const DifficultyselectionfullWidget({this.key}) : super(key: key);
+
   @override
-  _DifficultyselectionfullWidgetState createState() =>
-      _DifficultyselectionfullWidgetState();
+  DifficultyselectionfullWidgetState createState() =>
+      DifficultyselectionfullWidgetState();
 }
 
-class _DifficultyselectionfullWidgetState
+class DifficultyselectionfullWidgetState
     extends State<DifficultyselectionfullWidget> {
   String selectedDifficulty = ''; // Tracks the selected difficulty
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDifficulty = 'Easy'; // Default selected difficulty
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +213,8 @@ class _DifficultyselectionfullWidgetState
               padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start, // Align the text to the left
+                crossAxisAlignment:
+                    CrossAxisAlignment.start, // Align the text to the left
                 children: <Widget>[
                   Text(
                     'Difficulty',
@@ -244,12 +277,14 @@ class _DifficultyselectionfullWidgetState
     );
   }
 }
+
 class DifficultySelectionWidget extends StatelessWidget {
   final String difficultyText;
   final Color bulletColor;
   final Color selectedColor;
   final String svgTickPath;
-  final bool isSelected; // New parameter to determine if this widget is selected
+  final bool
+      isSelected; // New parameter to determine if this widget is selected
   final VoidCallback onTap; // Callback when the widget is tapped
 
   const DifficultySelectionWidget({
@@ -321,6 +356,11 @@ class TaskBulletButtonWidget extends StatelessWidget {
 }
 
 class EventdescriptioninputWidget extends StatelessWidget {
+
+  final TextEditingController descriptionController;
+
+  EventdescriptioninputWidget({required this.descriptionController});
+
   @override
   Widget build(BuildContext context) {
     // Figma Flutter Generator EventinputWidget - INSTANCE
@@ -339,12 +379,49 @@ class EventdescriptioninputWidget extends StatelessWidget {
                     boxShadow: [MyStyles.boxShadowBasic],
                     color: MyColors.primary,
                   ))),
-          Positioned(top: 35, left: 13, child: InputtextfieldWidget(hintText: "Add Description",  width: 385, height: 29,)),
+          Positioned(
+              top: 35,
+              left: 13,
+              child: InputtextfieldWidget(
+                controller: descriptionController,
+                hintText: "Add Description",
+                width: 385,
+                height: 29,
+              )),
           Positioned(
               top: 14,
               left: 13,
               child: Text('Event Description',
                   textAlign: TextAlign.left, style: MyStyles.magic14)),
         ]));
+  }
+}
+
+class CreateEventButtonWidget extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  CreateEventButtonWidget({required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+        width: 150,
+        height: 62,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: MyStyles.roundBox8,
+            boxShadow: [MyStyles.boxShadowBasic],
+            color: MyColors.secondary,
+            border: MyStyles.borderAll1,
+          ),
+          child: OutlinedButton(
+            onPressed: onPressed,
+            style: MyStyles.createButtonStyle,
+            child: Text(
+              'Create',
+              style: MyStyles.magic24.copyWith(color: Colors.black),
+            ),
+          ),
+        ));
   }
 }
