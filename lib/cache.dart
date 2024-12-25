@@ -7,11 +7,13 @@ import 'package:hocus_focus/sqflite_helper.dart';
 
 class TimerModel extends ChangeNotifier {
   int _seconds = 0;
+  int _maxTime = 60;
+  bool _isStopwatch = true;
   Timer? _timer;
 
   int get seconds => _seconds;
-  int get maxTime => 60;
-  bool get isStopwatch => true;
+  int get maxTime => _maxTime;
+  bool get isStopwatch => _isStopwatch;
 
   bool isStopped() {
     return _timer == null || !_timer!.isActive;
@@ -22,6 +24,12 @@ class TimerModel extends ChangeNotifier {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       _seconds++;
       notifyListeners();
+
+      if(_seconds >= _maxTime) {
+        giveReward(_seconds ~/ 2, _seconds ~/ 2);
+        stopTimer();
+        print("[TimeModel] Timer stopped");
+      }
     });
   }
 
@@ -34,38 +42,13 @@ class TimerModel extends ChangeNotifier {
     _seconds = 0;
     notifyListeners();
   }
+
+  void setNewTimer(int maxSeconds, bool isStopwatch) {
+    _maxTime = maxSeconds;
+    _isStopwatch = isStopwatch;
+    resetTimer();
+  }
 }
-
-//ValueNotifier<LoadClock?> currentClock = ValueNotifier<LoadClock?>(null);
-
-// Transfer clock data between screens
-/*class LoadClock {
-  late int maxTime;
-  late int elapsedTime;
-  late bool isStopwatch;
-  late DateTime _lastUpdate;
-  late bool isStopped;
-
-  LoadClock(this.maxTime, this.elapsedTime, this.isStopwatch, this.isStopped) {
-    _lastUpdate = DateTime.now();
-  }
-
-  bool isFinished() {
-    return elapsedTime >= maxTime;
-  }
-
-  void updateClock() {
-    final currentTime = DateTime.now();
-    final elapsed = currentTime.difference(_lastUpdate).inSeconds;
-    _lastUpdate = currentTime;
-    if (!isStopped) {
-      elapsedTime += elapsed;
-      if (isFinished()) {
-        resetClockAndGiveReward(maxTime ~/ 2, maxTime ~/ 2);
-      }
-    }
-  }
-}*/
 
 void addExpAndCoins(int exp, int coins) async {
   // Add experience and coins to the user
@@ -74,13 +57,12 @@ void addExpAndCoins(int exp, int coins) async {
   await dbh.addProfileCoins(coins);
 }
 
-/*
-void resetClockAndGiveReward(int exp, int coins) {
-  currentClock = ValueNotifier<LoadClock?>(null); // reset the clock
+
+void giveReward(int exp, int coins) {
   addExpAndCoins(exp, coins); // give the reward
-  print("Clock reset and reward given ($exp exp, $coins coins)");
+  print("[Cache] Reward given ($exp exp, $coins coins)");
 }
-*/
+
 const baseExp = 100;
 // function to get exp needed for next level based on current level.
 // each level requires 20 more exp than the previous level.

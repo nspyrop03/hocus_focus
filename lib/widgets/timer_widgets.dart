@@ -8,20 +8,23 @@ class TimerButtonWidget extends StatelessWidget {
   final bool isTimer;
 
   const TimerButtonWidget({super.key, required this.isTimer});
-  /*
-  void _addTimer(String timer, bool done) async {
+
+  void _addTimer(String timer, timerModel) async {
     int min = 0;
     int sec = 10; // default
     try {
-      min = int.parse(timer.split(":")[0]);
-      sec = int.parse(timer.split(":")[1]);
+      List<String> time = timer.split(":");
+      min = int.parse(time[0]);
+      sec = int.parse(time[1]);
     } catch (err) {
-      print("Error trying to parse input: $err");
+      if (timer.isEmpty) {
+        print("Empty input");
+        return;
+      }
     }
     int maxTime = min * 60 + sec;
-    cache.currentClock.value =
-        cache.LoadClock(maxTime, 0, !isTimer, true); // stopped at the start
-  }*/
+    timerModel.setNewTimer(maxTime, !isTimer);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +40,11 @@ class TimerButtonWidget extends StatelessWidget {
           ),
         ),
         onPressed: () {
+          timerModel.stopTimer();
           showDialog(
               context: context,
               builder: (context) {
-                return AddTimerDialog(onAddTimer: () {timerModel.resetTimer();}, isTimer: isTimer);
+                return AddTimerDialog(onAddTimer: _addTimer, isTimer: isTimer);
               });
         },
         child: Row(
@@ -74,19 +78,7 @@ class _StartStopButtonWidgetState extends State<StartStopButtonWidget> {
     super.initState();
     isPaused = widget.isPaused;
   }
-  /*
-  void _toggleStartStop() {
-    final currentClock = cache.currentClock.value;
-    if (currentClock != null) {
-      cache.currentClock.value = cache.LoadClock(
-          currentClock.maxTime,
-          currentClock.elapsedTime,
-          currentClock.isStopwatch,
-          !currentClock.isStopped);
-      //cache.currentClock.value?.updateClock();
-    }
-  }
-  */
+
   @override
   Widget build(BuildContext context) {
     final timerModel = Provider.of<cache.TimerModel>(context);
@@ -101,6 +93,9 @@ class _StartStopButtonWidgetState extends State<StartStopButtonWidget> {
           ),
           child: IconButton(
               onPressed: () {
+                if(timerModel.seconds >= timerModel.maxTime) {
+                  return;
+                }
                 setState(() {
                   //if (cache.currentClock.value == null) {
                   //  return;
@@ -144,6 +139,7 @@ class QuitButtonWidget extends StatefulWidget {
 class _QuitButtonWidgetState extends State<QuitButtonWidget> {
   @override
   Widget build(BuildContext context) {
+    final timerModel = Provider.of<cache.TimerModel>(context);
     return Column(
       children: [
         Container(
@@ -156,6 +152,10 @@ class _QuitButtonWidgetState extends State<QuitButtonWidget> {
           child: IconButton(
               onPressed: () {
                 print("Pressed QuitButton");
+                if(timerModel.seconds >= timerModel.maxTime) {
+                  return;
+                }
+                timerModel.resetTimer();
               },
               style: IconButton.styleFrom(
                 backgroundColor: MyColors.details,
@@ -176,7 +176,7 @@ class _QuitButtonWidgetState extends State<QuitButtonWidget> {
 }
 
 class AddTimerDialog extends StatefulWidget {
-  final VoidCallback onAddTimer;
+  final Function(String, cache.TimerModel) onAddTimer;
   final bool isTimer;
 
   const AddTimerDialog(
@@ -188,10 +188,10 @@ class AddTimerDialog extends StatefulWidget {
 
 class _AddTimerDialogState extends State<AddTimerDialog> {
   final TextEditingController _timerController = TextEditingController();
-  //bool _isDone = false;
 
   @override
   Widget build(BuildContext context) {
+    final timerModel = Provider.of<cache.TimerModel>(context);
     return AlertDialog(
       title: Text(
         widget.isTimer ? 'Add New Timer' : 'Add New Stopwatch',
@@ -221,8 +221,7 @@ class _AddTimerDialogState extends State<AddTimerDialog> {
         TextButton(
           onPressed: () {
             if (_timerController.text.isNotEmpty) {
-              //widget.onAddTimer(_timerController.text, _isDone);
-              widget.onAddTimer();
+              widget.onAddTimer(_timerController.text, timerModel);
               Navigator.of(context).pop();
             }
           },
