@@ -1,6 +1,8 @@
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
+const databaseFileName = "hocus_focus.db";
+
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
   factory DatabaseHelper() => _instance;
@@ -16,9 +18,10 @@ class DatabaseHelper {
   }
 
   Future<Database> _initDatabase() async {
-    String path = join(await getDatabasesPath(), 'app.db');
+    String path = join(await getDatabasesPath(), databaseFileName);
 
-    await deleteDatabase(path);
+    // Uncomment the next line only if you want the _onCreate function to be called on every app start
+    //await deleteDatabase(path);
 
     return await openDatabase(
       path,
@@ -37,20 +40,16 @@ class DatabaseHelper {
     );
 
     await db.execute(
-      'CREATE TABLE profile(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, exp INTEGER, coins INTEGER, cloak TEXT DEFAULT "cloak", hat TEXT DEFAULT "", wand TEXT DEFAULT "", total_tasks INTEGER DEFAULT 0, total_events INTEGER DEFAULT 0, total_coins INTEGER DEFAULT 0, total_hours INTEGER DEFAULT 0)'
-    );
+        'CREATE TABLE profile(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, exp INTEGER, coins INTEGER, cloak TEXT DEFAULT "cloak", hat TEXT DEFAULT "", wand TEXT DEFAULT "", total_tasks INTEGER DEFAULT 0, total_events INTEGER DEFAULT 0, total_coins INTEGER DEFAULT 0, total_hours INTEGER DEFAULT 0)');
 
     await db.execute(
-      'CREATE TABLE event(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, start_date TEXT, end_date TEXT, difficulty INTEGER)'
-    );
+        'CREATE TABLE event(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, description TEXT, start_date TEXT, end_date TEXT, difficulty INTEGER)');
 
     await db.execute(
-      'CREATE TABLE stats_date(date TEXT PRIMARY KEY, counter INTEGER DEFAULT 0)'
-    );
+        'CREATE TABLE stats_date(date TEXT PRIMARY KEY, counter INTEGER DEFAULT 0)');
 
     await db.execute(
-      'CREATE TABLE spell(name TEXT PRIMARY KEY, asset TEXT, description TEXT, unlocked INTEGER DEFAULT 0)'
-    );
+        'CREATE TABLE spell(name TEXT PRIMARY KEY, asset TEXT, description TEXT, unlocked INTEGER DEFAULT 0)');
 
     // populate with items
     await db.insert('item', {
@@ -129,7 +128,13 @@ class DatabaseHelper {
       'description': 'A spell that increases your speed.',
       'unlocked': 0
     });
+  }
 
+  // function to check if the profile table is empty
+  Future<bool> isDatabaseCreated() async {
+    final db = await database;
+    final List<Map<String, dynamic>> request = await db.query('profile');
+    return request.isNotEmpty;
   }
 
   Future<void> insertTask(String description, bool completed) async {
@@ -154,28 +159,23 @@ class DatabaseHelper {
 
   Future<void> createNewProfile(String name) async {
     final db = await database;
-    db.insert(
-      'profile',
-      {
-        'name': name,
-        'exp': 0,
-        'coins': 0
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace);
+    db.insert('profile', {'name': name, 'exp': 0, 'coins': 0},
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  Future<void> createNewEvent(String name, String description, String startDate, String endDate, int difficulty) async {
+  Future<void> createNewEvent(String name, String description, String startDate,
+      String endDate, int difficulty) async {
     final db = await database;
     db.insert(
-      'event',
-      {
-        'name': name,
-        'description': description,
-        'start_date': startDate,
-        'end_date': endDate,
-        'difficulty': difficulty
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace);
+        'event',
+        {
+          'name': name,
+          'description': description,
+          'start_date': startDate,
+          'end_date': endDate,
+          'difficulty': difficulty
+        },
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   Future<void> deleteEvent(int id) async {
@@ -254,53 +254,27 @@ class DatabaseHelper {
 
   Future<void> updateItemBought(String name) async {
     final db = await database;
-    db.update(
-      'item',
-      {
-        'bought': 1
-      },
-      where: 'name = ?',
-      whereArgs: [name]
-    );
+    db.update('item', {'bought': 1}, where: 'name = ?', whereArgs: [name]);
   }
 
   Future<void> selectItem(String item, String type) async {
     final db = await database;
     print("selecting $item of type $type");
-    db.update(
-      'profile', 
-      {
-        type: item
-      },
-      where: 'id = ?',
-      whereArgs: [1]
-    );
+    db.update('profile', {type: item}, where: 'id = ?', whereArgs: [1]);
   }
 
   Future<void> addProfileExp(int exp) async {
     final db = await database;
     final List<Map<String, dynamic>> request = await db.query('profile');
-    db.update(
-      'profile',
-      {
-        'exp': request[0]['exp'] + exp
-      },
-      where: 'id = ?',
-      whereArgs: [1]
-    );
+    db.update('profile', {'exp': request[0]['exp'] + exp},
+        where: 'id = ?', whereArgs: [1]);
   }
 
   Future<void> addProfileCoins(int coins) async {
     final db = await database;
     final List<Map<String, dynamic>> request = await db.query('profile');
-    db.update(
-      'profile',
-      {
-        'coins': request[0]['coins'] + coins
-      },
-      where: 'id = ?',
-      whereArgs: [1]
-    );
+    db.update('profile', {'coins': request[0]['coins'] + coins},
+        where: 'id = ?', whereArgs: [1]);
   }
 
   Future<List<Map<String, dynamic>>> getTasks() async {
@@ -328,7 +302,8 @@ class DatabaseHelper {
 
   Future<List<String>> getItemAssetsOfType(String type) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('item', where: 'type = ?', whereArgs: [type]);
+    final List<Map<String, dynamic>> maps =
+        await db.query('item', where: 'type = ?', whereArgs: [type]);
     return List.generate(maps.length, (i) {
       return maps[i]['asset'];
     });
@@ -336,9 +311,11 @@ class DatabaseHelper {
 
   Future<List<String>> getWizardAssetsOfType(String type) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('item', where: 'type = ?', whereArgs: [type]);
+    final List<Map<String, dynamic>> maps =
+        await db.query('item', where: 'type = ?', whereArgs: [type]);
     return List.generate(maps.length, (i) {
-      return maps[i]['asset'].replaceAll('assets/images/items/', 'assets/images/wizard/');
+      return maps[i]['asset']
+          .replaceAll('assets/images/items/', 'assets/images/wizard/');
     });
   }
 
@@ -358,83 +335,47 @@ class DatabaseHelper {
   Future<void> increaseTotalTasks() async {
     final db = await database;
     final List<Map<String, dynamic>> request = await db.query('profile');
-    db.update(
-      'profile',
-      {
-        'total_tasks': request[0]['total_tasks'] + 1
-      },
-      where: 'id = ?',
-      whereArgs: [1]
-    );
+    db.update('profile', {'total_tasks': request[0]['total_tasks'] + 1},
+        where: 'id = ?', whereArgs: [1]);
   }
 
   // function to decrease total_tasks in profile
   Future<void> decreaseTotalTasks() async {
     final db = await database;
     final List<Map<String, dynamic>> request = await db.query('profile');
-    db.update(
-      'profile',
-      {
-        'total_tasks': request[0]['total_tasks'] - 1
-      },
-      where: 'id = ?',
-      whereArgs: [1]
-    );
+    db.update('profile', {'total_tasks': request[0]['total_tasks'] - 1},
+        where: 'id = ?', whereArgs: [1]);
   }
 
   // function to increase total_events in profile
   Future<void> increaseTotalEvents() async {
     final db = await database;
     final List<Map<String, dynamic>> request = await db.query('profile');
-    db.update(
-      'profile',
-      {
-        'total_events': request[0]['total_events'] + 1
-      },
-      where: 'id = ?',
-      whereArgs: [1]
-    );
+    db.update('profile', {'total_events': request[0]['total_events'] + 1},
+        where: 'id = ?', whereArgs: [1]);
   }
 
   // function to add total_coins in profile
   Future<void> addTotalCoins(int coins) async {
     final db = await database;
     final List<Map<String, dynamic>> request = await db.query('profile');
-    db.update(
-      'profile',
-      {
-        'total_coins': request[0]['total_coins'] + coins
-      },
-      where: 'id = ?',
-      whereArgs: [1]
-    );
+    db.update('profile', {'total_coins': request[0]['total_coins'] + coins},
+        where: 'id = ?', whereArgs: [1]);
   }
 
   // function to add total_hours in profile
   Future<void> addTotalHours(int hours) async {
     final db = await database;
     final List<Map<String, dynamic>> request = await db.query('profile');
-    db.update(
-      'profile',
-      {
-        'total_hours': request[0]['total_hours'] + hours
-      },
-      where: 'id = ?',
-      whereArgs: [1]
-    );
+    db.update('profile', {'total_hours': request[0]['total_hours'] + hours},
+        where: 'id = ?', whereArgs: [1]);
   }
 
   // function to add a new date to stats_date
   Future<void> addDateToStats(String date) async {
     final db = await database;
-    db.insert(
-      'stats_date',
-      {
-        'date': date,
-        'counter': 0
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace
-    );
+    db.insert('stats_date', {'date': date, 'counter': 0},
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   // function to add today's date to stats_date
@@ -442,28 +383,17 @@ class DatabaseHelper {
     final db = await database;
     final now = DateTime.now();
     final date = "${now.year}-${now.month}-${now.day}";
-    db.insert(
-      'stats_date',
-      {
-        'date': date,
-        'counter': 0
-      },
-      conflictAlgorithm: ConflictAlgorithm.replace
-    );
+    db.insert('stats_date', {'date': date, 'counter': 0},
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   // function to increase counter for a date in stats_date
   Future<void> increaseDateCounter(String date) async {
     final db = await database;
-    final List<Map<String, dynamic>> request = await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
-    db.update(
-      'stats_date',
-      {
-        'counter': request[0]['counter'] + 1
-      },
-      where: 'date = ?',
-      whereArgs: [date]
-    );
+    final List<Map<String, dynamic>> request =
+        await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
+    db.update('stats_date', {'counter': request[0]['counter'] + 1},
+        where: 'date = ?', whereArgs: [date]);
   }
 
   // function to add today to stats_date if it doesn't exist or increase counter if it does
@@ -471,25 +401,14 @@ class DatabaseHelper {
     final db = await database;
     final now = DateTime.now();
     final date = "${now.year}-${now.month}-${now.day}";
-    final List<Map<String, dynamic>> request = await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
+    final List<Map<String, dynamic>> request =
+        await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
     if (request.isEmpty) {
-      db.insert(
-        'stats_date',
-        {
-          'date': date,
-          'counter': 1
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace
-      );
+      db.insert('stats_date', {'date': date, 'counter': 1},
+          conflictAlgorithm: ConflictAlgorithm.replace);
     } else {
-      db.update(
-        'stats_date',
-        {
-          'counter': request[0]['counter'] + 1
-        },
-        where: 'date = ?',
-        whereArgs: [date]
-      );
+      db.update('stats_date', {'counter': request[0]['counter'] + 1},
+          where: 'date = ?', whereArgs: [date]);
     }
   }
 
@@ -498,29 +417,19 @@ class DatabaseHelper {
     final db = await database;
     final now = DateTime.now();
     final date = "${now.year}-${now.month}-${now.day}";
-    final List<Map<String, dynamic>> request = await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
-    db.update(
-      'stats_date',
-      {
-        'counter': request[0]['counter'] + 1
-      },
-      where: 'date = ?',
-      whereArgs: [date]
-    );
+    final List<Map<String, dynamic>> request =
+        await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
+    db.update('stats_date', {'counter': request[0]['counter'] + 1},
+        where: 'date = ?', whereArgs: [date]);
   }
 
   // function to decrease counter for a date in stats_date
   Future<void> decreaseDateCounter(String date) async {
     final db = await database;
-    final List<Map<String, dynamic>> request = await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
-    db.update(
-      'stats_date',
-      {
-        'counter': request[0]['counter'] - 1
-      },
-      where: 'date = ?',
-      whereArgs: [date]
-    );
+    final List<Map<String, dynamic>> request =
+        await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
+    db.update('stats_date', {'counter': request[0]['counter'] - 1},
+        where: 'date = ?', whereArgs: [date]);
   }
 
   // function to decrease counter for today in stats_date
@@ -528,15 +437,10 @@ class DatabaseHelper {
     final db = await database;
     final now = DateTime.now();
     final date = "${now.year}-${now.month}-${now.day}";
-    final List<Map<String, dynamic>> request = await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
-    db.update(
-      'stats_date',
-      {
-        'counter': request[0]['counter'] - 1
-      },
-      where: 'date = ?',
-      whereArgs: [date]
-    );
+    final List<Map<String, dynamic>> request =
+        await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
+    db.update('stats_date', {'counter': request[0]['counter'] - 1},
+        where: 'date = ?', whereArgs: [date]);
   }
 
   // function to add today to stats_date if it doesn't exist or decrease counter if it does
@@ -544,39 +448,29 @@ class DatabaseHelper {
     final db = await database;
     final now = DateTime.now();
     final date = "${now.year}-${now.month}-${now.day}";
-    final List<Map<String, dynamic>> request = await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
+    final List<Map<String, dynamic>> request =
+        await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
     if (request.isEmpty) {
-      db.insert(
-        'stats_date',
-        {
-          'date': date,
-          'counter': 0
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace
-      );
+      db.insert('stats_date', {'date': date, 'counter': 0},
+          conflictAlgorithm: ConflictAlgorithm.replace);
     } else {
-      db.update(
-        'stats_date',
-        {
-          'counter': request[0]['counter'] - 1
-        },
-        where: 'date = ?',
-        whereArgs: [date]
-      );
+      db.update('stats_date', {'counter': request[0]['counter'] - 1},
+          where: 'date = ?', whereArgs: [date]);
     }
   }
-  
+
   // function to get the counter of a specific date from stats_date or return 0 if it doesn't exist
   Future<int> getDateCounter(String date) async {
     final db = await database;
-    final List<Map<String, dynamic>> request = await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
+    final List<Map<String, dynamic>> request =
+        await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
     if (request.isEmpty) {
       return 0;
     } else {
       return request[0]['counter'];
     }
   }
-  
+
   // function to get all stats_date
   Future<List<Map<String, dynamic>>> getStatsDates() async {
     final db = await database;
@@ -584,7 +478,7 @@ class DatabaseHelper {
   }
 
   ///***** Item and Spell functions *****///
-  
+
   // function to get all spells from database
   Future<List<Map<String, dynamic>>> getSpells() async {
     final db = await database;
@@ -594,48 +488,36 @@ class DatabaseHelper {
   // function to unlock a spell
   Future<void> unlockSpell(String name) async {
     final db = await database;
-    db.update(
-      'spell',
-      {
-        'unlocked': 1
-      },
-      where: 'name = ?',
-      whereArgs: [name]
-    );
+    db.update('spell', {'unlocked': 1}, where: 'name = ?', whereArgs: [name]);
   }
 
   // function to check if spell is unlocked
   Future<bool> isSpellUnlocked(String name) async {
     final db = await database;
-    final List<Map<String, dynamic>> request = await db.query('spell', where: 'name = ?', whereArgs: [name]);
+    final List<Map<String, dynamic>> request =
+        await db.query('spell', where: 'name = ?', whereArgs: [name]);
     return request[0]['unlocked'] == 1;
   }
 
   // function to check if item is bought
   Future<bool> isItemBought(String name) async {
     final db = await database;
-    final List<Map<String, dynamic>> request = await db.query('item', where: 'name = ?', whereArgs: [name]);
+    final List<Map<String, dynamic>> request =
+        await db.query('item', where: 'name = ?', whereArgs: [name]);
     return request[0]['bought'] == 1;
   }
 
   // function set item as bought
   Future<void> setItemBought(String name) async {
     final db = await database;
-    db.update(
-      'item',
-      {
-        'bought': 1
-      },
-      where: 'name = ?',
-      whereArgs: [name]
-    );
+    db.update('item', {'bought': 1}, where: 'name = ?', whereArgs: [name]);
   }
 
   // function to get the cost of an item
   Future<int> getItemCost(String name) async {
     final db = await database;
-    final List<Map<String, dynamic>> request = await db.query('item', where: 'name = ?', whereArgs: [name]);
+    final List<Map<String, dynamic>> request =
+        await db.query('item', where: 'name = ?', whereArgs: [name]);
     return request[0]['cost'];
   }
-
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/widgets/calendar_widgets.dart';
-import '../widgets/welcome_widgets.dart' as welcome;
+import 'main_page.dart' as main_page;
 import '../global.dart' as global;
 import '../cache.dart' as cache;
 
@@ -73,8 +73,9 @@ class _CalendarPageLayoutState extends State<CalendarPageLayout> {
             padding: const EdgeInsets.all(8.0),
             child: HoverplusbuttonWidget(
               onTap: () {
+                print("Maaaaaaaaan what's going on? ${main_page.mainPageKey.currentState == null}");
                 // Navigate to Event Details Page
-                welcome.mainPageKey.currentState
+                main_page.mainPageKey.currentState
                     ?.onItemTapped(global.setTasksIndex);
               },
             ),

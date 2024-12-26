@@ -3,7 +3,7 @@ import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/widgets/welcome_widgets.dart';
 import 'package:hocus_focus/widgets/set_tasks_widgets.dart';
 import '../global.dart' as global;
-import '../widgets/welcome_widgets.dart' as welcome;
+import 'main_page.dart' as main_page;
 
 class SetTasksPageLayout extends StatelessWidget {
   final _difficultyKey = GlobalKey<DifficultyselectionfullWidgetState>();
@@ -83,7 +83,7 @@ class SetTasksPageLayout extends StatelessWidget {
                   global.showNewEventNotification(name, description, difficulty);
 
                   // Navigate to the Calendar Page
-                  welcome.mainPageKey.currentState?.onItemTapped(global.calendarIndex);
+                  main_page.mainPageKey.currentState?.onItemTapped(global.calendarIndex);
 
                 },),
               ),

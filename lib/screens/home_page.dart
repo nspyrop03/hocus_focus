@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hocus_focus/widgets/home_widgets.dart';
 import 'package:hocus_focus/widgets/new_clock.dart';
 import 'package:hocus_focus/widgets/wizard_widgets.dart';
-import '../widgets/welcome_widgets.dart' as welcome;
+import 'main_page.dart' as main_page;
 import '../global.dart' as global;
 
 class HomePageLayout extends StatefulWidget {
@@ -25,7 +25,7 @@ class _HomePageLayoutState extends State<HomePageLayout> {
         ),
         GestureDetector(
             onTap: () {
-              welcome.mainPageKey.currentState?.onItemTapped(global.timerIndex);
+              main_page.mainPageKey.currentState?.onItemTapped(global.timerIndex);
             },
             child: TimerModelClockWidget()),
         SizedBox(
@@ -33,7 +33,7 @@ class _HomePageLayoutState extends State<HomePageLayout> {
         ),
         GestureDetector(
           onTap: () {
-            welcome.mainPageKey.currentState?.onItemTapped(global.statisticsIndex);
+            main_page.mainPageKey.currentState?.onItemTapped(global.statisticsIndex);
           },
           child: WizardHomeWidget(),
         )

@@ -69,7 +69,7 @@ void showDailyAtTime() async {
     'You have $uTasks uncompleted tasks and $uEvents uncompleted events! Time to focus on your tasks!',
     _nextInstanceOfNineAM(),
     platformChannelSpecifics,
-    androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    androidScheduleMode: AndroidScheduleMode.inexact,
     matchDateTimeComponents: DateTimeComponents.time,
     uiLocalNotificationDateInterpretation:
         UILocalNotificationDateInterpretation.wallClockTime,

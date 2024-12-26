@@ -223,8 +223,6 @@ class _ChangeAppearanceWidgetState extends State<ChangeAppearanceWidget> {
   }
 }
 
-final mainPageKey = GlobalKey<MainPageState>();
-
 class CreateButtonWidget extends StatelessWidget {
   final dynamic text;
   
