@@ -80,6 +80,8 @@ class SetTasksPageLayout extends StatelessWidget {
                   );
                   print("Event created successfully with name: $name, description: $description, start date: $startDate, end date: $endDate, difficulty: $difficulty");
 
+                  global.showNewEventNotification(name, description, difficulty);
+
                   // Navigate to the Calendar Page
                   welcome.mainPageKey.currentState?.onItemTapped(global.calendarIndex);
 

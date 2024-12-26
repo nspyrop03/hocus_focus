@@ -146,6 +146,12 @@ class DatabaseHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  // function to get uncompleted tasks from table task
+  Future<List<Map<String, dynamic>>> getUncompletedTasks() async {
+    final db = await database;
+    return await db.query('task', where: 'completed = ?', whereArgs: [0]);
+  }
+
   Future<void> createNewProfile(String name) async {
     final db = await database;
     db.insert(
