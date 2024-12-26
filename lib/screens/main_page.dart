@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:hocus_focus/screens/calendar_page.dart';
 import 'package:hocus_focus/screens/home_page.dart';
 import 'package:hocus_focus/screens/set_tasks_page.dart';
+import 'package:hocus_focus/screens/shop_page.dart';
+import 'package:hocus_focus/screens/spellbook_page.dart';
 import 'package:hocus_focus/screens/statistics_page.dart';
 import 'package:hocus_focus/screens/task_list_page.dart';
 import 'package:hocus_focus/screens/timer_page.dart';
@@ -23,8 +25,8 @@ class MainPageState extends State<MainPage> {
   var selectedIndex = 2;
 
   static List<Widget> _pages = <Widget>[
-    HomePageLayout(), // 0: should be shop page
-    HomePageLayout(), // 1: should be book page
+    ShopPageLayout(), // 0: should be shop page
+    SpellbookPage(), // 1: should be book page
     HomePageLayout(), // 2: home
     CalendarPageLayout(), // 3: should be calendar page
     TaskListPageLayout(), // 4: tasks list

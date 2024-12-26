@@ -520,4 +520,19 @@ class DatabaseHelper {
         await db.query('item', where: 'name = ?', whereArgs: [name]);
     return request[0]['cost'];
   }
+
+  Future<List<Map<String, dynamic>>> getWands() async {
+    final db = await database;
+    return await db.query('item', where: 'type = ?', whereArgs: ['Wands']);
+  }
+
+  Future<List<Map<String, dynamic>>> getCloaks() async {
+    final db = await database;
+    return await db.query('item', where: 'type = ?', whereArgs: ['Cloaks']);
+  }
+
+  Future<List<Map<String, dynamic>>> getHats() async {
+    final db = await database;
+    return await db.query('item', where: 'type = ?', whereArgs: ['Hats']);
+  }
 }

@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
+import 'dart:async';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hocus_focus/sqflite_helper.dart';
+
 
 class ShopWidgets extends StatefulWidget {
   @override
@@ -10,9 +16,21 @@ class ShopWidgets extends StatefulWidget {
 
 class _ShopPageWidgetsState extends State<ShopWidgets> {
   // List of items for each category
-  final List<String> wands = List.generate(12, (index) => "Wand ${index + 1}");
+  List<String> wands = [];
   final List<String> cloaks = List.generate(12, (index) => "Cloak ${index + 1}");
   final List<String> hats = List.generate(12, (index) => "Hat ${index + 1}");
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWands();
+  }
+
+  Future<void> _loadWands() async {
+    final dbHelper = DatabaseHelper();
+    wands = (await dbHelper.getWands()).map((wand) => wand['name'] as String).toList();
+    setState(() {});
+  }
 
   String selectedCategory = "Wands";
 

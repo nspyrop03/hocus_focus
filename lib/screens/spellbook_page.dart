@@ -30,7 +30,7 @@ class SpellbookPage extends StatelessWidget {
         backgroundColor: MyColors.background,
         body: Column(
           children: [
-            TopBarWidget(), // Top bar remains at the top
+            //TopBarWidget(), // Top bar remains at the top
             SafeArea(
             child: PageTitleWidget(title: "Spellbook"),
           ),
