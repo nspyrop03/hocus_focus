@@ -48,6 +48,10 @@ class DatabaseHelper {
       'CREATE TABLE stats_date(date TEXT PRIMARY KEY, counter INTEGER DEFAULT 0)'
     );
 
+    await db.execute(
+      'CREATE TABLE spell(name TEXT PRIMARY KEY, asset TEXT, description TEXT, unlocked INTEGER DEFAULT 0)'
+    );
+
     // populate with items
     await db.insert('item', {
       'name': 'purple_hat',
@@ -103,6 +107,29 @@ class DatabaseHelper {
       'type': 'wand',
       'cost': 200
     });
+
+    // Populate spells table
+    await db.insert('spell', {
+      'name': 'fireball_spell',
+      'asset': 'assets/images/spells/fireball_spell.svg',
+      'description': 'A true classic. The mighty fireball spell.',
+      'unlocked': 0
+    });
+
+    await db.insert('spell', {
+      'name': 'strength_spell',
+      'asset': 'assets/images/spells/strength_spell.svg',
+      'description': 'A spell that increases your strength.',
+      'unlocked': 0
+    });
+
+    await db.insert('spell', {
+      'name': 'swiftness_spell',
+      'asset': 'assets/images/spells/swiftness_spell.svg',
+      'description': 'A spell that increases your speed.',
+      'unlocked': 0
+    });
+
   }
 
   Future<void> insertTask(String description, bool completed) async {
@@ -548,6 +575,61 @@ class DatabaseHelper {
   Future<List<Map<String, dynamic>>> getStatsDates() async {
     final db = await database;
     return await db.query('stats_date');
+  }
+
+  ///***** Item and Spell functions *****///
+  
+  // function to get all spells from database
+  Future<List<Map<String, dynamic>>> getSpells() async {
+    final db = await database;
+    return await db.query('spell');
+  }
+
+  // function to unlock a spell
+  Future<void> unlockSpell(String name) async {
+    final db = await database;
+    db.update(
+      'spell',
+      {
+        'unlocked': 1
+      },
+      where: 'name = ?',
+      whereArgs: [name]
+    );
+  }
+
+  // function to check if spell is unlocked
+  Future<bool> isSpellUnlocked(String name) async {
+    final db = await database;
+    final List<Map<String, dynamic>> request = await db.query('spell', where: 'name = ?', whereArgs: [name]);
+    return request[0]['unlocked'] == 1;
+  }
+
+  // function to check if item is bought
+  Future<bool> isItemBought(String name) async {
+    final db = await database;
+    final List<Map<String, dynamic>> request = await db.query('item', where: 'name = ?', whereArgs: [name]);
+    return request[0]['bought'] == 1;
+  }
+
+  // function set item as bought
+  Future<void> setItemBought(String name) async {
+    final db = await database;
+    db.update(
+      'item',
+      {
+        'bought': 1
+      },
+      where: 'name = ?',
+      whereArgs: [name]
+    );
+  }
+
+  // function to get the cost of an item
+  Future<int> getItemCost(String name) async {
+    final db = await database;
+    final List<Map<String, dynamic>> request = await db.query('item', where: 'name = ?', whereArgs: [name]);
+    return request[0]['cost'];
   }
 
 }

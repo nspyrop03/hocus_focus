@@ -80,6 +80,17 @@ void giveReward(int exp, int coins) {
   print("[Cache] Reward given ($exp exp, $coins coins) and listeners notified");
 }
 
+void buyItem(String itemName) async {
+  var dbh = DatabaseHelper();
+  var cost = await dbh.getItemCost(itemName);
+  var coins = await dbh.getProfileCoins();
+  if (coins >= cost) {
+    await dbh.addProfileCoins(-cost);
+    await dbh.setItemBought(itemName);
+  }
+  print("[Cache] Item bought: $itemName");
+}
+
 const baseExp = 100;
 // function to get exp needed for next level based on current level.
 // each level requires 20 more exp than the previous level.
