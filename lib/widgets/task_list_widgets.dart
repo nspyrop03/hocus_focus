@@ -30,7 +30,16 @@ class _TaskListItemWidgetState extends State<TaskListItemWidget> {
     setState(() {
       isDone = value!;
     });
-    await DatabaseHelper().updateTask(widget.taskId, isDone);
+    var dbh = DatabaseHelper();
+
+    await dbh.updateTask(widget.taskId, isDone);
+    if(isDone) {
+      await dbh.increaseTotalTasks();
+      await dbh.increaseTodayOrAdd();
+    } else {
+      await dbh.decreaseTotalTasks();
+      await dbh.decreaseTodayOrAdd();
+    }
   }
 
   void _deleteTask() async {

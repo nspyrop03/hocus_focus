@@ -28,6 +28,7 @@ class TimerModel extends ChangeNotifier {
       notifyListeners();
 
       if (_seconds >= _maxTime) {
+        updateTotalHours(_seconds);
         giveReward(_seconds ~/ 2, _seconds ~/ 2);
         stopTimer();
         print("[TimeModel] Timer stopped");
@@ -58,11 +59,18 @@ class RewardNotifier extends ChangeNotifier {
   }
 }
 
+void updateTotalHours(int hours) async {
+  var dbh = DatabaseHelper();
+  await dbh.addTotalHours(hours);
+}
+
 void addExpAndCoins(int exp, int coins) async {
   // Add experience and coins to the user
   var dbh = DatabaseHelper();
   await dbh.addProfileExp(exp);
   await dbh.addProfileCoins(coins);
+
+  await dbh.addTotalCoins(coins);
 }
 
 void giveReward(int exp, int coins) {

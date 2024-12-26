@@ -51,8 +51,11 @@ class _CalendarPageLayoutState extends State<CalendarPageLayout> {
                                 global.baseEventCoins *
                                     (snapshot.data?[index]['difficulty']
                                         as int));
-                            await DatabaseHelper()
-                                .deleteEvent(snapshot.data?[index]['id']);
+
+                            var dbh = DatabaseHelper();
+                            await dbh.increaseTotalEvents();
+                            await dbh.increaseTodayOrAdd();
+                            await dbh.deleteEvent(snapshot.data?[index]['id']);
                             _loadEvents();
                           },
                         )));

@@ -31,7 +31,12 @@ class _HomePageLayoutState extends State<HomePageLayout> {
         SizedBox(
           height: 50,
         ),
-        WizardHomeWidget(),
+        GestureDetector(
+          onTap: () {
+            welcome.mainPageKey.currentState?.onItemTapped(global.statisticsIndex);
+          },
+          child: WizardHomeWidget(),
+        )
       ],
     );
   }
