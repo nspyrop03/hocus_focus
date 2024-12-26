@@ -4,4 +4,28 @@
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+<!--
+     <application
+        android:name=".MainApplication"
+        android:label="hocus_focus"
+        android:icon="@mipmap/ic_launcher"
+         tools:replace="android:name">
+
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|screenLayout|locale|layoutDirection"
+            android:theme="@style/LaunchTheme"
+            android:windowSoftInputMode="adjustResize"
+            tools:replace="android:configChanges">
+            
+             <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="${redirectSchemeName}" android:host="${redirectHostName}" />
+            </intent-filter>
+        </activity>
+    </application>
+-->
 </manifest>
