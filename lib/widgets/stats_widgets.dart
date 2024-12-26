@@ -102,7 +102,7 @@ class StatsBarGraphWidget extends StatelessWidget {
           return Container(
               padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 8.0),
               width: 385,
-              height: 350,
+              height: 355,
               decoration: BoxDecoration(
                 borderRadius: MyStyles.roundBox16,
                 boxShadow: [MyStyles.boxShadowBasic],

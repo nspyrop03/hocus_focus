@@ -1,3 +1,5 @@
+library main_page;
+
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/screens/calendar_page.dart';
 import 'package:hocus_focus/screens/home_page.dart';
@@ -6,6 +8,8 @@ import 'package:hocus_focus/screens/statistics_page.dart';
 import 'package:hocus_focus/screens/task_list_page.dart';
 import 'package:hocus_focus/screens/timer_page.dart';
 import 'package:hocus_focus/widgets/bar_widgets.dart';
+
+final mainPageKey = GlobalKey<MainPageState>();
 
 class MainPage extends StatefulWidget {
 
