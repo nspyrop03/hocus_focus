@@ -88,6 +88,8 @@ void buyItem(String itemName) async {
     await dbh.addProfileCoins(-cost);
     await dbh.setItemBought(itemName);
   }
+  BuildContext context = navigatorKey.currentContext!;
+  Provider.of<RewardNotifier>(context, listen: false).rewardGiven();
   print("[Cache] Item bought: $itemName");
 }
 

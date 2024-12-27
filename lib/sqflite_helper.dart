@@ -521,18 +521,10 @@ class DatabaseHelper {
     return request[0]['cost'];
   }
 
-  Future<List<Map<String, dynamic>>> getWands() async {
+  // function to get all items of a specific type
+  Future<List<Map<String, dynamic>>> getItemsOfType(String type) async {
     final db = await database;
-    return await db.query('item', where: 'type = ?', whereArgs: ['Wands']);
+    return await db.query('item', where: 'type = ?', whereArgs: [type]);
   }
 
-  Future<List<Map<String, dynamic>>> getCloaks() async {
-    final db = await database;
-    return await db.query('item', where: 'type = ?', whereArgs: ['Cloaks']);
-  }
-
-  Future<List<Map<String, dynamic>>> getHats() async {
-    final db = await database;
-    return await db.query('item', where: 'type = ?', whereArgs: ['Hats']);
-  }
 }

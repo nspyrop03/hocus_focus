@@ -192,8 +192,8 @@ class LevelBarWidget extends StatelessWidget {
         ),
         Container(
           // Level bar foreground
-          width: maxWidth *
-              cache.getLevelPercentage(exp), //maxWidth * (exp) / (level * 100),
+          width: maxWidth, //*
+              //cache.getLevelPercentage(exp), //maxWidth * (exp) / (level * 100),
           height: height,
           decoration: BoxDecoration(
             borderRadius: MyStyles.roundBox8,
