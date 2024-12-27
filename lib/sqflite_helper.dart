@@ -527,4 +527,17 @@ class DatabaseHelper {
     return await db.query('item', where: 'type = ?', whereArgs: [type]);
   }
 
+  // function to set level to unlock spells
+  int setSpellLevel(String spellName) {
+    switch (spellName) {
+      case 'fireball_spell':
+        return 1;
+      case 'strength_spell':
+        return 5;
+      case 'swiftness_spell':
+        return 10;
+      default:
+        return 0; // Default level if spell name doesn't match any case
+    }
+  }
 }

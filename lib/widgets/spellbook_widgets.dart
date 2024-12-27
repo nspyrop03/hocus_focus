@@ -2,194 +2,242 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:hocus_focus/sqflite_helper.dart'; 
+import 'package:hocus_focus/cache.dart';
 
+class SpellGridWidget extends StatefulWidget {
+  @override
+  _SpellGridWidgetState createState() => _SpellGridWidgetState();
+}
+
+class _SpellGridWidgetState extends State<SpellGridWidget> {
+  List<Map<String, dynamic>> spells = [];
+  int playerLevel = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSpellsAndUpdate();
+  }
+
+  Future<void> fetchSpellsAndUpdate() async {
+    var dbHelper = DatabaseHelper();
+
+    // Fetch player experience and calculate level using existing function
+    int exp = await dbHelper.getProfileExp();
+    int level = getLevel(exp); // Assume getLevel is imported from level_helper.dart
+
+    setState(() {
+      playerLevel = level;
+    });
+
+    // Fetch spells from the database
+    List<Map<String, dynamic>> allSpells = await dbHelper.getSpells();
+
+    for (var spell in allSpells) {
+      String spellName = spell['name'];
+      int requiredLevel = dbHelper.setSpellLevel(spellName); // Assume setSpellLevel is imported
+
+      // Unlock spells if the player meets the level requirement
+      if (requiredLevel <= playerLevel && spell['unlocked'] == 0) {
+        await dbHelper.unlockSpell(spellName);
+        spell['unlocked'] = 1; // Update the local spell list
+      }
+    }
+
+    setState(() {
+      spells = allSpells;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return spells.isEmpty
+        ? Center(child: CircularProgressIndicator())
+        : GridView.builder(
+            padding: const EdgeInsets.all(20.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10.0,
+              crossAxisSpacing: 20.0,
+              childAspectRatio: 1.0,
+            ),
+            itemCount: spells.length, // Dynamically render based on spells
+            itemBuilder: (BuildContext context, int index) {
+              final spell = spells[index];
+              final isUnlocked = spell['unlocked'] == 1;
+
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: MyColors.details,
+                      borderRadius: BorderRadius.circular(14),
+                      boxShadow: [MyStyles.boxShadowBasic],
+                      border: Border.all(
+                        color: isUnlocked
+                            ? Colors.green
+                            : Colors.red.withOpacity(0.6),
+                        width: 2,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Opacity(
+                          opacity: isUnlocked ? 1.0 : 0.4,
+                          child: SvgPicture.asset(
+                            spell['asset'], // Path to the spell's SVG
+                            width: 80,
+                            height: 80,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          spell['name'].replaceAll('_', ' '), // Display name without underscores
+                          style: MyStyles.magic14,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+  }
+}
+
+
+
+/// A single spell slot widget for displaying a spell name.
 class SpellslotWidget extends StatelessWidget {
   final String spellName;
 
-  // Constructor with spellName parameter and a default value
   SpellslotWidget({this.spellName = 'Spell Name'});
 
   @override
   Widget build(BuildContext context) {
-    // Figma Flutter Generator SpellslotWidget - INSTANCE
     return Container(
       width: 170,
       height: 161,
-      child: Stack(children: <Widget>[
-        Positioned(
-          top: 0,
-          left: 0,
-          child: Container(
-            width: 170,
-            height: 161,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(14),
-                topRight: Radius.circular(14),
-                bottomLeft: Radius.circular(14),
-                bottomRight: Radius.circular(14),
-              ),
-              boxShadow: [MyStyles.boxShadowBasic],
-              color: MyColors.details,
-              border: Border.all(
-                color: Color.fromRGBO(0, 0, 0, 1),
-                width: 1,
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            top: 0,
+            left: 0,
+            child: Container(
+              width: 170,
+              height: 161,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [MyStyles.boxShadowBasic],
+                color: MyColors.details,
+                border: Border.all(color: Color.fromRGBO(0, 0, 0, 1), width: 1),
               ),
             ),
           ),
-        ),
-        Positioned(
-          top: 9,
-          left: 15,
-          child: Container(
-            width: 140,
-            height: 115,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(10),
-                topRight: Radius.circular(10),
-                bottomLeft: Radius.circular(10),
-                bottomRight: Radius.circular(10),
-              ),
-              color: MyColors.primary,
-              border: Border.all(
-                color: Color.fromRGBO(0, 0, 0, 1),
-                width: 1,
+          Positioned(
+            top: 9,
+            left: 15,
+            child: Container(
+              width: 140,
+              height: 115,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                color: MyColors.primary,
+                border: Border.all(color: Color.fromRGBO(0, 0, 0, 1), width: 1),
               ),
             ),
           ),
-        ),
-        Positioned(
-          top: 131,
-          left: 15,
-          child: Container(
-            width: 140,
-            height: 26,
-            decoration: BoxDecoration(),
+          Positioned(
+            top: 131,
+            left: 15,
             child: Container(
               width: 140,
               height: 26,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
+                borderRadius: BorderRadius.circular(10),
                 color: MyColors.primary,
-                border: Border.all(
-                  color: Color.fromRGBO(0, 0, 0, 1),
-                  width: 1,
-                ),
+                border: Border.all(color: Color.fromRGBO(0, 0, 0, 1), width: 1),
               ),
-              child: Center(  // Centering the text inside the container
+              child: Center(
                 child: Text(
-                  spellName,  // Use the custom spellName here
+                  spellName,
                   textAlign: TextAlign.center,
                   style: MyStyles.magic14,
                 ),
               ),
             ),
           ),
+          Positioned(
+            top: 12,
+            left: 18.5,
+            child: SvgPicture.asset(
+              'assets/images/vector12.svg',
+              semanticsLabel: 'vector12',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A widget for displaying the page title.
+class PageTitleWidget extends StatelessWidget {
+  final String title;
+
+  PageTitleWidget({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Text(
+        title,
+        style: MyStyles.magic40,
+      ),
+    );
+  }
+}
+
+/// A widget for displaying the entire spellbook grid.
+class SpellbookGrid extends StatelessWidget {
+  SpellbookGrid();
+
+  @override
+  Widget build(BuildContext context) {
+    // Default to 20 spell slots for now.
+    int numberOfSpells = 20;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: GridView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 10.0,
+            crossAxisSpacing: 20.0,
+            childAspectRatio: 1.0,
+          ),
+          itemCount: numberOfSpells, // Total number of spell slots
+          itemBuilder: (BuildContext context, int index) {
+            return SpellslotWidget(); // Always default to "Spell Name"
+          },
         ),
-        Positioned(
-          top: 12,
-          left: 18.5,
-          child: SvgPicture.asset('assets/images/vector12.svg', semanticsLabel: 'vector12'),
-        ),
-      ]),
+      ),
     );
   }
 }
 
 
-/*
-class SpellslotWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // Figma Flutter Generator SpellslotWidget - INSTANCE
-    return Container(
-        width: 170,
-        height: 161,
-        child: Stack(children: <Widget>[
-          Positioned(
-              top: 0,
-              left: 0,
-              child: Container(
-                  width: 170,
-                  height: 161,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(14),
-                      topRight: Radius.circular(14),
-                      bottomLeft: Radius.circular(14),
-                      bottomRight: Radius.circular(14),
-                    ),
-                    boxShadow: [MyStyles.boxShadowBasic],
-                    color: MyColors.details,
-                    border: Border.all(
-                      color: Color.fromRGBO(0, 0, 0, 1),
-                      width: 1,
-                    ),
-                  ))),
-          Positioned(
-              top: 9,
-              left: 15,
-              child: Container(
-                  width: 140,
-                  height: 115,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    ),
-                    color: MyColors.primary,
-                    border: Border.all(
-                      color: Color.fromRGBO(0, 0, 0, 1),
-                      width: 1,
-                    ),
-                  ))),
-          Positioned(
-              top: 131,
-              left: 15,
-              child: Container(
-                  width: 140,
-                  height: 26,
-                  decoration: BoxDecoration(),
-                  child: Stack(children: <Widget>[
-                    Positioned(
-                        top: 0,
-                        left: 0,
-                        child: Container(
-                            width: 140,
-                            height: 26,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                              ),
-                              color: MyColors.primary,
-                              border: Border.all(
-                                color: Color.fromRGBO(0, 0, 0, 1),
-                                width: 1,
-                              ),
-                            ))),
-                    Positioned(
-                        top: 6,
-                        left: 33,
-                        child: Text('Spell Name',
-                            textAlign: TextAlign.left,
-                            style: MyStyles.magic14)),
-                  ]))),
-          Positioned(
-              top: 12,
-              left: 18.5,
-              child: SvgPicture.asset('assets/images/vector12.svg',
-                  semanticsLabel: 'vector12')),
-        ]));
-  }
-}*/
+
+
+
+
