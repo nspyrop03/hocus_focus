@@ -49,7 +49,7 @@ class DatabaseHelper {
         'CREATE TABLE stats_date(date TEXT PRIMARY KEY, counter INTEGER DEFAULT 0)');
 
     await db.execute(
-        'CREATE TABLE spell(name TEXT PRIMARY KEY, asset TEXT, description TEXT, unlocked INTEGER DEFAULT 0)');
+        'CREATE TABLE spell(name TEXT PRIMARY KEY, asset TEXT, description TEXT, requiredLevel INTEGER, unlocked INTEGER DEFAULT 0)');
 
     // populate with items
     await db.insert('item', {
@@ -112,6 +112,7 @@ class DatabaseHelper {
       'name': 'fireball_spell',
       'asset': 'assets/images/spells/fireball_spell.svg',
       'description': 'A true classic. The mighty fireball spell.',
+      'requiredLevel': 1,
       'unlocked': 0
     });
 
@@ -119,6 +120,7 @@ class DatabaseHelper {
       'name': 'strength_spell',
       'asset': 'assets/images/spells/strength_spell.svg',
       'description': 'A spell that increases your strength.',
+      'requiredLevel': 5,
       'unlocked': 0
     });
 
@@ -126,6 +128,7 @@ class DatabaseHelper {
       'name': 'swiftness_spell',
       'asset': 'assets/images/spells/swiftness_spell.svg',
       'description': 'A spell that increases your speed.',
+      'requiredLevel': 10,
       'unlocked': 0
     });
   }

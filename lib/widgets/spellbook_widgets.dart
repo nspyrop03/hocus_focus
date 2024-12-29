@@ -6,6 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hocus_focus/sqflite_helper.dart'; 
 import 'package:hocus_focus/cache.dart';
 
+
+/*
 class SpellGridWidget extends StatefulWidget {
   @override
   _SpellGridWidgetState createState() => _SpellGridWidgetState();
@@ -24,31 +26,19 @@ class _SpellGridWidgetState extends State<SpellGridWidget> {
   Future<void> fetchSpellsAndUpdate() async {
     var dbHelper = DatabaseHelper();
 
-    // Fetch player experience and calculate level using existing function
+    // Fetch player experience and calculate level
     int exp = await dbHelper.getProfileExp();
-    int level = getLevel(exp); // Assume getLevel is imported from level_helper.dart
+    int level = getLevel(exp); // Assume getLevel is imported
+
+    // Fetch spells from the database
+    List<Map<String, dynamic>> fetchedSpells = await dbHelper.getSpells();
 
     setState(() {
       playerLevel = level;
+      spells = fetchedSpells;
     });
 
-    // Fetch spells from the database
-    List<Map<String, dynamic>> allSpells = await dbHelper.getSpells();
-
-    for (var spell in allSpells) {
-      String spellName = spell['name'];
-      int requiredLevel = dbHelper.setSpellLevel(spellName); // Assume setSpellLevel is imported
-
-      // Unlock spells if the player meets the level requirement
-      if (requiredLevel <= playerLevel && spell['unlocked'] == 0) {
-        await dbHelper.unlockSpell(spellName);
-        spell['unlocked'] = 1; // Update the local spell list
-      }
-    }
-
-    setState(() {
-      spells = allSpells;
-    });
+    print("Fetched spells: $spells");
   }
 
   @override
@@ -56,62 +46,261 @@ class _SpellGridWidgetState extends State<SpellGridWidget> {
     return spells.isEmpty
         ? Center(child: CircularProgressIndicator())
         : GridView.builder(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(8.0),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisSpacing: 10.0,
-              crossAxisSpacing: 20.0,
-              childAspectRatio: 1.0,
+              crossAxisSpacing: 10.0,
             ),
-            itemCount: spells.length, // Dynamically render based on spells
-            itemBuilder: (BuildContext context, int index) {
+            itemCount: spells.length,
+            itemBuilder: (context, index) {
               final spell = spells[index];
-              final isUnlocked = spell['unlocked'] == 1;
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: MyColors.primary,
+                  border: Border.all(color: Colors.black, width: 1),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      spell['asset'],
+                      width: 80,
+                      height: 80,
+                      placeholderBuilder: (context) => CircularProgressIndicator(),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      spell['name'],
+                      style: MyStyles.magic14,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+  }
+}
+*/
 
-              return Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: MyColors.details,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [MyStyles.boxShadowBasic],
-                      border: Border.all(
-                        color: isUnlocked
-                            ? Colors.green
-                            : Colors.red.withOpacity(0.6),
-                        width: 2,
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Opacity(
-                          opacity: isUnlocked ? 1.0 : 0.4,
-                          child: SvgPicture.asset(
-                            spell['asset'], // Path to the spell's SVG
-                            width: 80,
-                            height: 80,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          spell['name'].replaceAll('_', ' '), // Display name without underscores
-                          style: MyStyles.magic14,
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+class SpellGridWidget extends StatefulWidget {
+  @override
+  _SpellGridWidgetState createState() => _SpellGridWidgetState();
+}
+
+class _SpellGridWidgetState extends State<SpellGridWidget> {
+  List<Map<String, dynamic>> spells = [];
+  int playerLevel = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchSpellsAndUpdate();
+  }
+
+  Future<void> fetchSpellsAndUpdate() async {
+    var dbHelper = DatabaseHelper();
+
+    // Fetch player experience and calculate level
+    int exp = await dbHelper.getProfileExp();
+    int level = getLevel(exp); // Assume getLevel is imported
+
+    // Fetch spells from the database
+    List<Map<String, dynamic>> fetchedSpells = await dbHelper.getSpells();
+
+    setState(() {
+      playerLevel = level;
+      spells = fetchedSpells;
+    });
+
+    print("Fetched spells: $spells");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return spells.isEmpty
+        ? Center(child: CircularProgressIndicator())
+        : GridView.builder(
+            padding: const EdgeInsets.all(8.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10.0,
+              crossAxisSpacing: 10.0,
+            ),
+            itemCount: spells.length,
+            itemBuilder: (context, index) {
+              final spell = spells[index];
+              bool isUnlocked = playerLevel >= (spell['requiredLevel'] ?? 0);
+
+              return SpellslotWidget(
+                spellName: spell['name']?.replaceAll('_', ' ') ?? 'Unknown Spell', // Format the name
+                assetPath: spell['asset'] ?? '', // Pass the asset path
+                isUnlocked: isUnlocked, // Pass unlocked status
               );
             },
           );
   }
 }
 
+class SpellslotWidget extends StatelessWidget {
+  final String spellName;
+  final String assetPath;
+  final bool isUnlocked;
+
+  SpellslotWidget({
+    this.spellName = 'Spell Name',
+    this.assetPath = '',
+    this.isUnlocked = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        color: MyColors.primary,
+        boxShadow: [MyStyles.boxShadowBasic],
+        border: Border.all(
+          color: isUnlocked ? Colors.green : Colors.red.withOpacity(0.6),
+          width: 2,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Opacity(
+            opacity: isUnlocked ? 1.0 : 0.5,
+            child: SvgPicture.asset(
+              assetPath,
+              width: 80,
+              height: 80,
+              placeholderBuilder: (context) => CircularProgressIndicator(),
+            ),
+          ),
+          SizedBox(height: 10),
+          Text(
+            spellName,
+            style: MyStyles.magic14,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
+/// A widget for displaying the page title.
+class PageTitleWidget extends StatelessWidget {
+  final String title;
+
+  PageTitleWidget({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Text(
+        title,
+        style: MyStyles.magic40,
+      ),
+    );
+  }
+}
+
+class SpellbookGrid extends StatelessWidget {
+  final List<Map<String, dynamic>> spells;
+
+  SpellbookGrid({required this.spells});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 10.0,
+          crossAxisSpacing: 20.0,
+          childAspectRatio: 1.0,
+        ),
+        itemCount: spells.length,
+        itemBuilder: (BuildContext context, int index) {
+          final spell = spells[index];
+          final isUnlocked = spell['unlocked'] == 1;
+
+          return SpellslotWidget(
+            spellName: spell['name'].replaceAll('_', ' '), // Format the name
+            assetPath: spell['asset'], // Pass the asset path
+            isUnlocked: isUnlocked, // Pass unlocked status
+          );
+        },
+      ),
+    );
+  }
+}
 
 
+
+
+
+/*
+class SpellslotWidget extends StatelessWidget {
+  final String spellName;
+  final String assetPath;
+  final bool isUnlocked;
+
+  SpellslotWidget({
+    this.spellName = 'Spell Name',
+    this.assetPath = '',
+    this.isUnlocked = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        color: MyColors.details,
+        boxShadow: [MyStyles.boxShadowBasic],
+        border: Border.all(
+          color: isUnlocked ? Colors.green : Colors.red.withOpacity(0.6),
+          width: 2,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Opacity(
+            opacity: isUnlocked ? 1.0 : 0.4,
+            child: SvgPicture.asset(
+              assetPath, // Use the assetPath
+              width: 80,
+              height: 80,
+              placeholderBuilder: (context) => CircularProgressIndicator(),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            spellName,
+            style: MyStyles.magic14,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
+    );
+  }
+}
+*/
+
+
+
+
+
+
+/*
 /// A single spell slot widget for displaying a spell name.
 class SpellslotWidget extends StatelessWidget {
   final String spellName;
@@ -236,7 +425,7 @@ class SpellbookGrid extends StatelessWidget {
   }
 }
 
-
+*/
 
 
 
