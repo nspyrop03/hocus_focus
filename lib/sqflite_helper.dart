@@ -112,24 +112,21 @@ class DatabaseHelper {
       'name': 'fireball_spell',
       'asset': 'assets/images/spells/fireball_spell.svg',
       'description': 'A true classic. The mighty fireball spell.',
-      'requiredLevel': 1,
-      'unlocked': 0
+      'requiredLevel': 1
     });
 
     await db.insert('spell', {
       'name': 'strength_spell',
       'asset': 'assets/images/spells/strength_spell.svg',
       'description': 'A spell that increases your strength.',
-      'requiredLevel': 5,
-      'unlocked': 0
+      'requiredLevel': 5
     });
 
     await db.insert('spell', {
       'name': 'swiftness_spell',
       'asset': 'assets/images/spells/swiftness_spell.svg',
       'description': 'A spell that increases your speed.',
-      'requiredLevel': 10,
-      'unlocked': 0
+      'requiredLevel': 10
     });
   }
 
@@ -485,7 +482,11 @@ class DatabaseHelper {
   // function to get all spells from database
   Future<List<Map<String, dynamic>>> getSpells() async {
     final db = await database;
-    return await db.query('spell');
+    final List<Map<String, dynamic>> spells = await db.query('spell');
+    spells.forEach((spell) {
+      print('Spell: ${spell['name']}, Required Level: ${spell['requiredLevel']}');
+    });
+    return spells;
   }
 
   // function to unlock a spell
@@ -530,17 +531,4 @@ class DatabaseHelper {
     return await db.query('item', where: 'type = ?', whereArgs: [type]);
   }
 
-  // function to set level to unlock spells
-  int setSpellLevel(String spellName) {
-    switch (spellName) {
-      case 'fireball_spell':
-        return 1;
-      case 'strength_spell':
-        return 5;
-      case 'swiftness_spell':
-        return 10;
-      default:
-        return 0; // Default level if spell name doesn't match any case
-    }
-  }
 }
