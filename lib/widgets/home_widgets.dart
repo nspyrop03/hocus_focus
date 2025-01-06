@@ -12,7 +12,6 @@ import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:app_links/app_links.dart';
 
 
-
 /*works if you open spotify app manually first*/
 class SpotifyDropdownWidget extends StatefulWidget {
   @override
@@ -48,8 +47,7 @@ class _SpotifyDropdownWidgetState extends State<SpotifyDropdownWidget> {
   }
 
   Future<void> fetchPlaylist() async {
-    final playlistId =
-        '0bFM9BJW82tIZvdShJo8Xv'; // Replace with your actual playlist ID
+    final playlistId = '0bFM9BJW82tIZvdShJo8Xv'; // Replace with your actual playlist ID
     final response = await http.get(
       Uri.parse('https://api.spotify.com/v1/playlists/$playlistId'),
       headers: {
@@ -175,6 +173,11 @@ class _SpotifyDropdownWidgetState extends State<SpotifyDropdownWidget> {
     );
   }
 }
+
+
+
+
+
 
 
 
