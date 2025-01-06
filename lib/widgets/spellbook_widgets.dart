@@ -6,6 +6,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/cache.dart';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:hocus_focus/styles/colors.dart';
+import 'package:hocus_focus/styles/styles.dart';
+import 'package:hocus_focus/sqflite_helper.dart';
+
 class SpellGridWidget extends StatefulWidget {
   @override
   _SpellGridWidgetState createState() => _SpellGridWidgetState();
@@ -101,97 +107,79 @@ class SpellslotWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (isUnlocked) {
-          _showSpellPopup(context);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(
-                    'You need to reach level $requiredLevel to unlock this spell!')),
-          );
-        }
-      },
-      child: Container(
-        width: 170,
-        height: 161,
-        child: Stack(
-          children: <Widget>[
-            // Outer rectangle
-            Positioned(
-              top: 0,
-              left: 0,
-              child: Container(
-                width: 170,
-                height: 161,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(14),
-                  boxShadow: [MyStyles.boxShadowBasic],
-                  color: MyColors.details,
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 1,
-                  ),
-                ),
-              ),
-            ),
-            // Inner rectangle with unlock state
-            Positioned(
-              top: 9,
-              left: 15,
-              child: Container(
-                width: 140,
-                height: 115,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: MyColors.primary,
-                  border: Border.all(
-                    color:
-                        isUnlocked ? Colors.green : Colors.red.withOpacity(0.6),
-                    width: 2,
-                  ),
-                ),
-                child: Center(
-                  child: Opacity(
-                    opacity: isUnlocked ? 1.0 : 0.5,
-                    child: SvgPicture.asset(
-                      assetPath,
-                      width: 80,
-                      height: 80,
-                      placeholderBuilder: (context) =>
-                          CircularProgressIndicator(),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            // Rectangle for the spell name
-            Positioned(
-              top: 131,
-              left: 15,
-              child: Container(
-                width: 140,
-                height: 26,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: MyColors.primary,
-                  border: Border.all(color: Colors.black, width: 1),
-                ),
-                child: Center(
-                  child: Text(
-                    spellName,
-                    textAlign: TextAlign.center,
-                    style: MyStyles.magic14,
-                  ),
-                ),
-              ),
-            ),
-          ],
+  return GestureDetector(
+    onTap: () {
+      if (isUnlocked) {
+        _showSpellPopup(context);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  'You need to reach level $requiredLevel to unlock this spell!')),
+        );
+      }
+    },
+    child: Container(
+      width: 170,
+      height: 161,
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [MyStyles.boxShadowBasic],
+        color: MyColors.details,
+        border: Border.all(
+          color: Colors.black,
+          width: 1,
         ),
       ),
-    );
-  }
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 140,
+            height: 115,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: MyColors.primary,
+              border: Border.all(
+                color: isUnlocked ? Colors.green : Colors.red.withOpacity(0.6),
+                width: 2,
+              ),
+            ),
+            child: Center(
+              child: Opacity(
+                opacity: isUnlocked ? 1.0 : 0.5,
+                child: SvgPicture.asset(
+                  assetPath,
+                  width: 80,
+                  height: 80,
+                  placeholderBuilder: (context) => CircularProgressIndicator(),
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
+          Container(
+            width: 140,
+            height: 26,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: MyColors.primary,
+              border: Border.all(color: Colors.black, width: 1),
+            ),
+            child: Center(
+              child: Text(
+                spellName,
+                textAlign: TextAlign.center,
+                style: MyStyles.magic14,
+              ),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
 
   void _showSpellPopup(BuildContext context) {
     showDialog(
