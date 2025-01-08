@@ -19,7 +19,7 @@ class _HomePageLayoutState extends State<HomePageLayout> {
         SizedBox(
           height: 20,
         ),
-        //SpotifyDropdownWidget(),
+        MusicDropdownWidget(),
         SizedBox(
           height: 50,
         ),

@@ -89,6 +89,7 @@ class StatsBarGraphWidget extends StatelessWidget {
       values.add(value);
     }
     maxValue = max(values.reduce(max), 1);
+    print(values);
     return values;
   }
   

@@ -382,7 +382,13 @@ class DatabaseHelper {
   Future<void> addTodayToStats() async {
     final db = await database;
     final now = DateTime.now();
-    final date = "${now.year}-${now.month}-${now.day}";
+    var date = "${now.year}-${now.month}-${now.day}";
+    if (date.length != 10) {
+      var parts = date.split('-');
+      var mm = parts[1].length == 1 ? '0${parts[1]}' : parts[1];
+      var dd = parts[2].length == 1 ? '0${parts[2]}' : parts[2];
+      date = '${parts[0]}-$mm-$dd';
+    }
     db.insert('stats_date', {'date': date, 'counter': 0},
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
@@ -400,7 +406,13 @@ class DatabaseHelper {
   Future<void> increaseTodayOrAdd() async {
     final db = await database;
     final now = DateTime.now();
-    final date = "${now.year}-${now.month}-${now.day}";
+    var date = "${now.year}-${now.month}-${now.day}";
+    if (date.length != 10) {
+      var parts = date.split('-');
+      var mm = parts[1].length == 1 ? '0${parts[1]}' : parts[1];
+      var dd = parts[2].length == 1 ? '0${parts[2]}' : parts[2];
+      date = '${parts[0]}-$mm-$dd';
+    }
     final List<Map<String, dynamic>> request =
         await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
     if (request.isEmpty) {
@@ -410,6 +422,7 @@ class DatabaseHelper {
       db.update('stats_date', {'counter': request[0]['counter'] + 1},
           where: 'date = ?', whereArgs: [date]);
     }
+    //print("Today's date: $date and the counter just got up!");
   }
 
   // function to increase counter for today in stats_date
@@ -436,7 +449,13 @@ class DatabaseHelper {
   Future<void> decreaseTodayCounter() async {
     final db = await database;
     final now = DateTime.now();
-    final date = "${now.year}-${now.month}-${now.day}";
+    var date = "${now.year}-${now.month}-${now.day}";
+    if (date.length != 10) {
+      var parts = date.split('-');
+      var mm = parts[1].length == 1 ? '0${parts[1]}' : parts[1];
+      var dd = parts[2].length == 1 ? '0${parts[2]}' : parts[2];
+      date = '${parts[0]}-$mm-$dd';
+    }
     final List<Map<String, dynamic>> request =
         await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
     db.update('stats_date', {'counter': request[0]['counter'] - 1},
@@ -447,7 +466,13 @@ class DatabaseHelper {
   Future<void> decreaseTodayOrAdd() async {
     final db = await database;
     final now = DateTime.now();
-    final date = "${now.year}-${now.month}-${now.day}";
+    var date = "${now.year}-${now.month}-${now.day}";
+    if (date.length != 10) {
+      var parts = date.split('-');
+      var mm = parts[1].length == 1 ? '0${parts[1]}' : parts[1];
+      var dd = parts[2].length == 1 ? '0${parts[2]}' : parts[2];
+      date = '${parts[0]}-$mm-$dd';
+    }
     final List<Map<String, dynamic>> request =
         await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
     if (request.isEmpty) {
@@ -462,8 +487,16 @@ class DatabaseHelper {
   // function to get the counter of a specific date from stats_date or return 0 if it doesn't exist
   Future<int> getDateCounter(String date) async {
     final db = await database;
+    String trueDate = date;
+    if (date.length != 10) {
+      var parts = date.split('-');
+      var mm = parts[1].length == 1 ? '0${parts[1]}' : parts[1];
+      var dd = parts[2].length == 1 ? '0${parts[2]}' : parts[2];
+      trueDate = '${parts[0]}-$mm-$dd';
+    }
+    print('True date: $trueDate');
     final List<Map<String, dynamic>> request =
-        await db.query('stats_date', where: 'date = ?', whereArgs: [date]);
+        await db.query('stats_date', where: 'date = ?', whereArgs: [trueDate]);
     if (request.isEmpty) {
       return 0;
     } else {
