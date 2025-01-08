@@ -10,13 +10,15 @@
         android:icon="@mipmap/ic_launcher">
 
         <!-- Spotify LoginActivity configuration -->
+        <!--
         <activity
             android:name="com.spotify.sdk.android.auth.LoginActivity"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:exported="true" />
-
+        -->
         <!-- Flutter Web Auth Callback Activity -->
+        <!--
         <activity
             android:name="com.linusu.flutter_web_auth.CallbackActivity"
             android:exported="true">
@@ -24,9 +26,10 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="yourapp" android:host="callback" />
+                <data android:scheme="hocusfocus" android:host="callback" />
             </intent-filter>
         </activity>
+        -->
 
         <!-- MainActivity configuration -->
         <activity
@@ -41,6 +44,15 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name="com.linusu.flutter_web_auth_2.CallbackActivity" android:exported="true">
+            <intent-filter android:label="flutter_web_auth_2">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="hocusfocus" android:host="callback"/> 
             </intent-filter>
         </activity>
 

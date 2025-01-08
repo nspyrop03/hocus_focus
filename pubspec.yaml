@@ -20,15 +20,12 @@ dependencies:
   provider: ^6.1.2
   flutter_local_notifications: ^18.0.1
   timezone: ^0.10.0
-  spotify_sdk: ^3.0.2 
   url_launcher: ^6.0.10
-  flutter_web_auth: ^0.6.0
-  http: ^1.2.2
   shared_preferences: ^2.2.0
   flutter_native_splash: ^2.2.19
   fluttertoast: ^8.2.2
   audioplayers: ^6.1.0
-  app_links: ^6.3.3
+  youtube_explode_dart: ^2.3.6
 
 
 dev_dependencies:
