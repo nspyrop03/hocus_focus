@@ -11,6 +11,12 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:spotify_sdk/spotify_sdk.dart';
 import 'package:app_links/app_links.dart';
 
+String? refreshToken;
+String? accessToken;
+String clientId = '86d93d4d00a444aca1320485a4dd2a6f';
+String clientSecret =
+    'efd4de52231548bc8d56ac15949dfee4'; // Store securely, avoid hardcoding
+String redirectUri = 'yourapp://callback';
 
 /*works if you open spotify app manually first*/
 class SpotifyDropdownWidget extends StatefulWidget {
@@ -47,7 +53,13 @@ class _SpotifyDropdownWidgetState extends State<SpotifyDropdownWidget> {
   }
 
   Future<void> fetchPlaylist() async {
-    final playlistId = '0bFM9BJW82tIZvdShJo8Xv'; // Replace with your actual playlist ID
+    if (accessToken == null) {
+      print('Access token is null, cannot fetch playlist');
+      return;
+    }
+
+    final playlistId =
+        '73DM1FCc2XQuDev81lKbK1'; // Replace with your actual playlist ID
     final response = await http.get(
       Uri.parse('https://api.spotify.com/v1/playlists/$playlistId'),
       headers: {
@@ -61,24 +73,26 @@ class _SpotifyDropdownWidgetState extends State<SpotifyDropdownWidget> {
         tracks = (playlist['tracks']['items'] as List)
             .map((item) => {
                   'name': item['track']['name'] as String,
-                  'uri': item['track']['uri'] as String, // Track URI
+                  'uri': item['track']['uri'] as String,
                 })
             .toList();
       });
+      print('Playlist fetched successfully: ${tracks.length} tracks found.');
     } else {
       print('Failed to fetch playlist: ${response.body}');
     }
   }
 
   Future<void> playTrack(String trackUri) async {
+    await _refreshToken(); // Refresh token before making the request
     final response = await http.put(
-      Uri.parse('https://api.spotify.com/v1/me/player/play'),
+      Uri.parse('https://api.spotify.com/v1/me/player/playdevice_id= +this._device_id'),
       headers: {
         'Authorization': 'Bearer $accessToken',
         'Content-Type': 'application/json',
       },
       body: json.encode({
-        'uris': [trackUri], // Use the track URI for playback
+        'uris': [trackUri]
       }),
     );
 
@@ -89,18 +103,88 @@ class _SpotifyDropdownWidgetState extends State<SpotifyDropdownWidget> {
     }
   }
 
-  void loginToSpotify() async {
-    String clientId = '86d93d4d00a444aca1320485a4dd2a6f';
-    String redirectUri = 'yourapp://callback';
-    String scopes =
-        'user-read-private user-read-email playlist-read-private streaming user-modify-playback-state';
+  Future<void> loginToSpotify() async {
+    const callbackUrlScheme = 'yourapp';
+    try {
+      final result = await FlutterWebAuth.authenticate(
+        url: 'https://accounts.spotify.com/authorize'
+            '?response_type=code'
+            '&client_id=$clientId'
+            '&redirect_uri=$redirectUri'
+            '&scope=user-read-private user-read-email '
+            'playlist-read-private streaming '
+            'user-modify-playback-state '
+            'app-remote-control '
+            'user-read-playback-state user-read-currently-playing',
+        callbackUrlScheme: callbackUrlScheme,
+      );
 
-    accessToken = await getAuth(clientId, redirectUri, scopes);
-    if (accessToken != null) {
-      print('Logged in with token: $accessToken');
-      await fetchPlaylist();
+      final authCode = Uri.parse(result).queryParameters['code'];
+      if (authCode != null) {
+        await _exchangeCodeForToken(authCode);
+        if (accessToken != null) {
+          await fetchPlaylist(); //  Fetch playlist immediately after successful login
+        }
+      }
+    } catch (e) {
+      print('Error during authentication: $e');
+    }
+  }
+
+  Future<void> _exchangeCodeForToken(String code) async {
+    final response = await http.post(
+      Uri.parse('https://accounts.spotify.com/api/token'),
+      headers: {
+        'Authorization':
+            'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'grant_type': 'authorization_code',
+        'code': code,
+        'redirect_uri': redirectUri,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      accessToken = data['access_token'];
+      refreshToken = data['refresh_token'];
+      if (accessToken != null) {
+        print('Successfully logged in! Token obtained. ' + accessToken!);
+      } else {
+        print('Failed to obtain access token.');
+      }
     } else {
-      print('Failed to log in');
+      print('Failed to exchange code for token: ${response.body}');
+    }
+  }
+
+  Future<void> _refreshToken() async {
+    if (refreshToken == null) {
+      print('No refresh token available.');
+      return;
+    }
+
+    final response = await http.post(
+      Uri.parse('https://accounts.spotify.com/api/token'),
+      headers: {
+        'Authorization':
+            'Basic ${base64Encode(utf8.encode('$clientId:$clientSecret'))}',
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: {
+        'grant_type': 'refresh_token',
+        'refresh_token': refreshToken!,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      accessToken = data['access_token'];
+      print('Token refreshed successfully!');
+    } else {
+      print('Failed to refresh token: ${response.body}');
     }
   }
 
@@ -161,12 +245,13 @@ class _SpotifyDropdownWidgetState extends State<SpotifyDropdownWidget> {
                       selectedTrackUri = newUri;
                     });
                     if (newUri != null) {
-                      playTrack(newUri);
+                      playTrack(
+                          newUri); // ✅ Play track immediately after selection
                     }
                   },
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
