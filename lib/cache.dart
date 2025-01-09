@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:hocus_focus/main.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
+import 'package:vibration/vibration.dart';
 
 class TimerModel extends ChangeNotifier {
   int _seconds = 0;
@@ -32,6 +34,8 @@ class TimerModel extends ChangeNotifier {
         giveReward(_seconds ~/ 2, _seconds ~/ 2);
         stopTimer();
         print("[TimeModel] Timer stopped");
+        HapticFeedback.vibrate();
+        //Vibration.vibrate(duration: 1000);
       }
     });
   }

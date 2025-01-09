@@ -15,7 +15,7 @@ class _CalendarPageLayoutState extends State<CalendarPageLayout> {
     await DatabaseHelper().getEvents();
     setState(() {});
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return Column(children: [

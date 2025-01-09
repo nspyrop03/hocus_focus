@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
 import 'package:pattern_formatter/pattern_formatter.dart';
+
 
 class InputtextfieldWidget extends StatelessWidget {
   final String hintText; // Parameter for the hint text
@@ -11,14 +13,15 @@ class InputtextfieldWidget extends StatelessWidget {
   final double width; // Customizable width
   final double height; // Customizable height
 
+
   // Constructor with optional parameters
   const InputtextfieldWidget({
     Key? key,
-    required this.hintText, // This allows different hint text to be passed
+    this.hintText = '', // This allows different hint text to be passed
     this.controller, // Optional controller
     this.width = 280, // Default width if not provided
     this.height = 29, // Default height if not provided
-  }) : super(key: key);
+   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +65,14 @@ class InputtextfieldWidget extends StatelessWidget {
 }
 
 class EventInputWidget extends StatelessWidget {
-
   final TextEditingController nameController;
   final TextEditingController startDateController;
   final TextEditingController endDateController;
 
-  EventInputWidget({required this.nameController, required this.startDateController, required this.endDateController});
+  EventInputWidget(
+      {required this.nameController,
+      required this.startDateController,
+      required this.endDateController});
 
   @override
   Widget build(BuildContext context) {
@@ -108,14 +113,10 @@ class EventInputWidget extends StatelessWidget {
                     ),
                     SizedBox(width: 15),
                     InputtextfieldWidget(
-                      //controller: endDateController,
-                      //hintText: "DD/MM/YYYY",
-                      //width: 200,
-                      //height: 29,
-                      keyboardType: TextInputType.number,
-  inputFormatters: [
-    DateInputFormatter(),
-  ],
+                      controller: endDateController,
+                      hintText: "DD/MM/YYYY",
+                      width: 200,
+                      height: 29,
                     ),
                   ],
                 ),
@@ -361,7 +362,6 @@ class TaskBulletButtonWidget extends StatelessWidget {
 }
 
 class EventdescriptioninputWidget extends StatelessWidget {
-
   final TextEditingController descriptionController;
 
   EventdescriptioninputWidget({required this.descriptionController});
