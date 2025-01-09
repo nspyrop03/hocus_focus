@@ -6,12 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/cache.dart';
 
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:hocus_focus/styles/colors.dart';
-import 'package:hocus_focus/styles/styles.dart';
-import 'package:hocus_focus/sqflite_helper.dart';
-
 class SpellGridWidget extends StatefulWidget {
   @override
   _SpellGridWidgetState createState() => _SpellGridWidgetState();
