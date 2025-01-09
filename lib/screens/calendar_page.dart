@@ -33,7 +33,7 @@ class _CalendarPageLayoutState extends State<CalendarPageLayout> {
                     padding: const EdgeInsets.symmetric(vertical: 0.0),
                     child: Align(
                         alignment: Alignment.center,
-                        child: EventdisplayWidget(
+                        child: EventDisplayWidget2(
                           eventId: snapshot.data?[index]['id'],
                           eventName: snapshot.data?[index]['name'],
                           description: snapshot.data?[index]['description'],

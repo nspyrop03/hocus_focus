@@ -7,7 +7,6 @@ import 'package:hocus_focus/global.dart';
 import 'package:hocus_focus/main.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter/services.dart';
 import 'package:vibration/vibration.dart';
 
 class TimerModel extends ChangeNotifier {
@@ -38,8 +37,8 @@ class TimerModel extends ChangeNotifier {
 
         showClockFinishedNotification(!_isStopwatch);
 
-        HapticFeedback.vibrate();
-        //Vibration.vibrate(duration: 1000);
+        //HapticFeedback.vibrate();
+        Vibration.vibrate(duration: 300);
       }
     });
   }

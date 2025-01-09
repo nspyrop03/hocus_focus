@@ -132,16 +132,12 @@ class _TableBasicsExampleState extends State<TableBasicsExample> {
   }
 }
 
-
-class EventdisplayWidget extends StatelessWidget {
-  final String eventName;
-  final String eventDate;
-  final String description;
+class EventDisplayWidget2 extends StatelessWidget {
+  final String eventName, eventDate, description;
   final int eventId;
-  final VoidCallback onDelete;
-  final VoidCallback onFinish;
+  final VoidCallback onDelete, onFinish;
 
-   EventdisplayWidget({
+  EventDisplayWidget2({
     required this.eventId,
     required this.eventName,
     required this.eventDate,
@@ -153,79 +149,82 @@ class EventdisplayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0), // Add spacing between events
+      margin: EdgeInsets.symmetric(vertical: 8.0),
       width: 360,
       height: 60,
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-            top: 0,
-            left: 0,
-            child: Container(
-              width: 360,
-              height: 60,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8)),
-                boxShadow: [MyStyles.boxShadowBasic],
-                color: MyColors.primary, 
-              ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        boxShadow: [MyStyles.boxShadowBasic],
+        color: MyColors.primary,
+      ),
+      child: /*Expanded(child:*/ Row(
+        //mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        '$eventDate ($eventName)',
+                        textAlign: TextAlign.left,
+                        style: MyStyles.magic14.copyWith(
+                          color: MyColors.details,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                      child: Text(
+                        description,
+                        textAlign: TextAlign.left,
+                        style: MyStyles.magic14,
+                      ),
+                    ),
+                  ],
+                ),
+              ]
             ),
           ),
-          Positioned(
-            top: 7,
-            left: 5,
-            child: Text(
-              '$eventDate ($eventName)', // Use dynamic event date
-              textAlign: TextAlign.center,
-              style: MyStyles.magic14.copyWith(
-                color: MyColors.details, // Replace with MyColors.details
-              ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                GestureDetector(
+                  onTap: onFinish,
+                  child: Text(
+                    'Finish',
+                    textAlign: TextAlign.center,
+                    style: MyStyles.magic14.copyWith(
+                      color: MyColors.accept,
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: onDelete,
+                  child: Text(
+                    'Delete',
+                    textAlign: TextAlign.center,
+                    style: MyStyles.magic14.copyWith(
+                      color: MyColors.delete,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          Positioned(
-            top: 45,
-            left: 318,
-            child: GestureDetector(
-              onTap: onFinish,
-              child: Text(
-                'Finish',
-                textAlign: TextAlign.center,
-                style: MyStyles.magic14.copyWith(
-                  color: MyColors.accept, // Replace with MyColors.accept
-                )
-              ),
-            ),
-          ),
-          Positioned(
-            top: 4,
-            left: 317,
-            child: GestureDetector(
-              onTap: onDelete,
-              child: Text(
-                'Delete',
-                textAlign: TextAlign.center,
-                style: MyStyles.magic14.copyWith(
-                  color: MyColors.delete, // Replace with MyColors.delete
-                )
-              ),
-            ),
-          ),
-          Positioned(
-            top: 22,
-            left: 5,
-            child: Text(
-              description, // Use dynamic event name
-              textAlign: TextAlign.center,
-              style: MyStyles.magic14 // Replace with MyStyles.magic14
-            ),
-          ),
-        ],
+          )
+        ]
       ),
     );
   }
 }
-
-
 
 class HoverplusbuttonWidget extends StatelessWidget {
   final VoidCallback onTap;

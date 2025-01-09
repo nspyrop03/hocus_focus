@@ -8,8 +8,10 @@ import 'main_page.dart' as main_page;
 class SetTasksPageLayout extends StatelessWidget {
   final _difficultyKey = GlobalKey<DifficultyselectionfullWidgetState>();
   final _nameController = TextEditingController();
-  final _startDateController = TextEditingController();
-  final _endDateController = TextEditingController();
+  //final _startDateController = TextEditingController();
+  //final _endDateController = TextEditingController();
+  DateTime _startDate = DateTime.now();
+  DateTime _endDate = DateTime.now().add(Duration(days: 1));
   final _descriptionController = TextEditingController();
 
   @override
@@ -26,8 +28,14 @@ class SetTasksPageLayout extends StatelessWidget {
               SizedBox(height: 10),
               Align(alignment: Alignment.center, child: EventInputWidget(
                 nameController: _nameController,
-                startDateController: _startDateController,
-                endDateController: _endDateController,
+                startDate: _startDate,
+                endDate: _endDate,
+                onStartDateChanged: (DateTime newDate) {
+                  _startDate = newDate;
+                },
+                onEndDateChanged: (DateTime newDate) {
+                  _endDate = newDate;
+                },
               )),
               SizedBox(height: 10),
               Align(
@@ -60,6 +68,7 @@ class SetTasksPageLayout extends StatelessWidget {
                     description = _descriptionController.text;
                   }
 
+                  /*
                   String startDate = getCurrentDate();
                   if (_startDateController.text.isNotEmpty && isValidDate(_startDateController.text)) {
                     startDate = _startDateController.text;
@@ -69,6 +78,9 @@ class SetTasksPageLayout extends StatelessWidget {
                   if (_endDateController.text.isNotEmpty && isFutureDate(_endDateController.text)) {
                     endDate = _endDateController.text;
                   }
+                  */
+                  String startDate = "${_startDate.day}/${_startDate.month}/${_startDate.year}";
+                  String endDate = "${_endDate.day}/${_endDate.month}/${_endDate.year}";
 
                   // Save the event to the database
                   await DatabaseHelper().createNewEvent(
