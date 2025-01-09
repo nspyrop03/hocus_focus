@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hocus_focus/global.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:hocus_focus/styles/styles.dart';
 
@@ -40,10 +41,13 @@ class _TaskListItemWidgetState extends State<TaskListItemWidget> {
       await dbh.decreaseTotalTasks();
       await dbh.decreaseTodayOrAdd();
     }
+
+    playSound(true);
   }
 
   void _deleteTask() async {
     await DatabaseHelper().deleteTask(widget.taskId);
+    playSound(false);
     widget.onDelete();  
   }
 

@@ -79,7 +79,7 @@ class WizardIconWidgetState extends State<WizardIconWidget> {
                 width: 148,
                 height: 168,
                 decoration: BoxDecoration(
-                  border: MyStyles.borderAll1,
+                  //border: MyStyles.borderAll1, // debug
                 ),
                 child: Center(child: CircularProgressIndicator()));
           } else {
@@ -89,7 +89,7 @@ class WizardIconWidgetState extends State<WizardIconWidget> {
                 width: 148,
                 height: 168,
                 decoration: BoxDecoration(
-                  border: MyStyles.borderAll1,
+                  //border: MyStyles.borderAll1,
                 ),
               );
             } else {
@@ -97,7 +97,7 @@ class WizardIconWidgetState extends State<WizardIconWidget> {
                 width: 148,
                 height: 168,
                 decoration: BoxDecoration(
-                  border: MyStyles.borderAll1,
+                  //border: MyStyles.borderAll1, //debug
                 ),
                 child: Stack(
                   children: <Widget>[
@@ -159,7 +159,7 @@ class WizardHomeWidget extends StatelessWidget {
                 width: 148,
                 height: 168,
                 decoration: BoxDecoration(
-                  border: MyStyles.borderAll1,
+                  //border: MyStyles.borderAll1,
                 ),
                 child: Center(child: CircularProgressIndicator()));
           } else {
@@ -169,7 +169,7 @@ class WizardHomeWidget extends StatelessWidget {
                 width: 148,
                 height: 168,
                 decoration: BoxDecoration(
-                  border: MyStyles.borderAll1,
+                  //border: MyStyles.borderAll1,
                 ),
               );
             } else {
@@ -177,7 +177,7 @@ class WizardHomeWidget extends StatelessWidget {
                 width: 148,
                 height: 168,
                 decoration: BoxDecoration(
-                  border: MyStyles.borderAll1,
+                  //border: MyStyles.borderAll1, //debug
                 ),
                 child: Stack(
                   children: <Widget>[

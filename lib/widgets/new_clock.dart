@@ -18,7 +18,7 @@ class _TimerModelClockWidgetState extends State<TimerModelClockWidget> {
         width: 220,
         height: 220,
         decoration: BoxDecoration(
-          border: MyStyles.borderAll1,
+          //border: MyStyles.borderAll1, //debug
         ),
         child: Scaffold(
           resizeToAvoidBottomInset: false,

@@ -108,14 +108,14 @@ class EventInputWidget extends StatelessWidget {
                     ),
                     SizedBox(width: 15),
                     InputtextfieldWidget(
-                      //controller: endDateController,
-                      //hintText: "DD/MM/YYYY",
-                      //width: 200,
-                      //height: 29,
-                      keyboardType: TextInputType.number,
-  inputFormatters: [
-    DateInputFormatter(),
-  ],
+                      controller: endDateController,
+                      hintText: "DD/MM/YYYY",
+                      width: 200,
+                      height: 29,
+                      //keyboardType: TextInputType.number,
+  //inputFormatters: [
+  //  DateInputFormatter(),
+  //],
                     ),
                   ],
                 ),

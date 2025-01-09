@@ -47,6 +47,7 @@ flutter:
     - assets/images/wizard/
     - assets/images/items/
     - assets/images/spells/
+    - assets/sounds/
   
   fonts:
     - family: AvolisseDEMO

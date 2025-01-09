@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'dart:math' as math;
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -290,68 +289,3 @@ class HoverplusbuttonWidget extends StatelessWidget {
     );
   }
 }
-
-
-/*
-class HoverplusbuttonWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        // Perform your action here
-        print('Hover plus button tapped');
-      },
-      child: Container(
-        width: 60,
-        height: 60,
-        child: Stack(
-          children: <Widget>[
-            // Background circle container
-            Positioned(
-              top: 0,
-              left: 0,
-              child: Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: MyColors.details, // Replace with your color
-                  borderRadius: BorderRadius.all(Radius.elliptical(60, 60)),
-                ),
-              ),
-            ),
-            // Inner content with SVGs
-            Positioned(
-              top: 13,
-              left: 13,
-              child: Container(
-                width: 34,
-                height: 34,
-                child: Stack(
-                  children: <Widget>[
-                    Positioned(
-                      top: 15,
-                      left: 0,
-                      child: SvgPicture.asset(
-                        'assets/images/vector24.svg', 
-                        semanticsLabel: 'vector24',
-                      ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      left: 16,
-                      child: SvgPicture.asset(
-                        'assets/images/vector23.svg', 
-                        semanticsLabel: 'vector23',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/
