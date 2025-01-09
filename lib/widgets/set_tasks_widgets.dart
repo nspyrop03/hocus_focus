@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 
 class InputtextfieldWidget extends StatelessWidget {
   final String hintText; // Parameter for the hint text
@@ -107,10 +108,14 @@ class EventInputWidget extends StatelessWidget {
                     ),
                     SizedBox(width: 15),
                     InputtextfieldWidget(
-                      controller: endDateController,
-                      hintText: "DD/MM/YYYY",
-                      width: 200,
-                      height: 29,
+                      //controller: endDateController,
+                      //hintText: "DD/MM/YYYY",
+                      //width: 200,
+                      //height: 29,
+                      keyboardType: TextInputType.number,
+  inputFormatters: [
+    DateInputFormatter(),
+  ],
                     ),
                   ],
                 ),

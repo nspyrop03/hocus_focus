@@ -27,6 +27,8 @@ dependencies:
   audioplayers: ^6.1.0
   youtube_explode_dart: ^2.3.6
   audio_service: ^0.18.16
+  vibration: ^1.8.4
+  pattern_formatter: ^4.0.0
 
 
 dev_dependencies:
