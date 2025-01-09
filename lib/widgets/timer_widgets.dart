@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hocus_focus/styles/colors.dart';
 import 'package:hocus_focus/styles/styles.dart';
+//import 'package:hocus_focus/tests/test.dart';
 import 'package:provider/provider.dart';
 import '../cache.dart' as cache;
-
 
 class TimerButtonWidget extends StatelessWidget {
   final bool isTimer;
@@ -23,8 +23,36 @@ class TimerButtonWidget extends StatelessWidget {
         return;
       }
     }
+    print("set new timer: $min:$sec");
     int maxTime = min * 60 + sec;
     timerModel.setNewTimer(maxTime, !isTimer);
+  }
+
+  //function to adjust time on 12hour format based on PM/AM
+  void _adjustHour(String timer, cache.TimerModel timerModel) {
+    // Split the input time by colon (e.g., "3:10 PM" -> ["3", "10 PM"])
+    List<String> time = timer.split(":");
+
+    // The last part of the time string is "AM" or "PM"
+    String amPm =
+        time[1].trim().substring(time[1].trim().length - 2); // Get AM/PM
+
+    // Extract the hour and minute
+    int hour = int.parse(time[0].trim());
+    int min = int.parse(
+        time[1].trim().substring(0, time[1].trim().length - 2)); // Remove AM/PM
+
+    // Adjust the hour based on AM/PM
+    if (amPm == "PM" && hour != 12) {
+      hour += 12; // Convert PM hour to 24-hour format, except for 12 PM
+    } else if (amPm == "AM" && hour == 12) {
+      hour = 0; // 12 AM is midnight, so set hour to 0
+    }
+
+    // Debug print to check the hour and minute
+    print("Hour: $hour, Minute: $min");
+    String formattedTime = "$hour:$min";
+    _addTimer(formattedTime, timerModel);
   }
 
   @override
@@ -50,18 +78,18 @@ class TimerButtonWidget extends StatelessWidget {
               });*/
           final TimeOfDay? selectedTime = await showTimePicker(
             context: context,
-            initialTime: TimeOfDay(hour: 0, minute: 10),
+            initialTime: TimeOfDay(hour: 00, minute: 10),
             //helpText: '',
             initialEntryMode: TimePickerEntryMode.inputOnly, // Input only mode
-             builder: (context, child) {
+            builder: (context, child) {
               return Theme(
                 data: Theme.of(context).copyWith(
                   timePickerTheme: TimePickerThemeData(
-                    backgroundColor: MyColors.background, 
-                    hourMinuteColor: MyColors.primary, 
-                    hourMinuteTextColor: MyColors.details, 
-                    dialHandColor: MyColors.details, 
-                    dialBackgroundColor: MyColors.details, 
+                    backgroundColor: MyColors.background,
+                    hourMinuteColor: MyColors.primary,
+                    hourMinuteTextColor: MyColors.details,
+                    dialHandColor: MyColors.details,
+                    dialBackgroundColor: MyColors.details,
                     entryModeIconColor: MyColors.details,
                     hourMinuteTextStyle: MyStyles.magic40,
                     dayPeriodTextStyle: MyStyles.magic14,
@@ -71,19 +99,20 @@ class TimerButtonWidget extends StatelessWidget {
                   materialTapTargetSize: MaterialTapTargetSize.padded,
                   textButtonTheme: TextButtonThemeData(
                     style: TextButton.styleFrom(
-                      foregroundColor: MyColors.details, // OK and Cancel buttons color
+                      foregroundColor:
+                          MyColors.details, // OK and Cancel buttons color
                       textStyle: MyStyles.magic14,
                     ),
                   ),
                   colorScheme: ColorScheme.light(
-                    primary: MyColors.details, 
-                    onPrimary: MyColors.secondary,  
-                    onSurface: MyColors.details, 
+                    primary: MyColors.details,
+                    onPrimary: MyColors.secondary,
+                    onSurface: MyColors.details,
                   ),
-                
                 ),
                 child: MediaQuery(
-                  data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true), // Enforces 24-hour format
+                  data: MediaQuery.of(context).copyWith(
+                      alwaysUse24HourFormat: true), // Enforces 24-hour format
                   child: Focus(
                     focusNode: FocusNode(), // This ensures the keyboard shows
                     child: child!,
@@ -92,10 +121,10 @@ class TimerButtonWidget extends StatelessWidget {
               );
             },
           );
-          
 
           if (selectedTime != null) {
             debugPrint(selectedTime.format(context));
+            _adjustHour(selectedTime.format(context), timerModel);
           }
         },
         child: Row(
@@ -144,7 +173,7 @@ class _StartStopButtonWidgetState extends State<StartStopButtonWidget> {
           ),
           child: IconButton(
               onPressed: () {
-                if(timerModel.seconds >= timerModel.maxTime) {
+                if (timerModel.seconds >= timerModel.maxTime) {
                   return;
                 }
                 setState(() {
@@ -152,7 +181,7 @@ class _StartStopButtonWidgetState extends State<StartStopButtonWidget> {
                   //  return;
                   //}
                   isPaused = !isPaused;
-                  if(isPaused) {
+                  if (isPaused) {
                     timerModel.stopTimer();
                   } else {
                     timerModel.startTimer();
@@ -203,7 +232,7 @@ class _QuitButtonWidgetState extends State<QuitButtonWidget> {
           child: IconButton(
               onPressed: () {
                 print("Pressed QuitButton");
-                if(timerModel.seconds >= timerModel.maxTime) {
+                if (timerModel.seconds >= timerModel.maxTime) {
                   return;
                 }
                 timerModel.resetTimer();
