@@ -29,18 +29,25 @@ class TimerButtonWidget extends StatelessWidget {
   }
 
   //function to adjust time on 12hour format based on PM/AM
-  void _adjustHour(String timer, cache.TimerModel timerModel) {
+  void _adjustHour(int hourIn, int minIn, String periodName, cache.TimerModel timerModel) {
+    // timer string is of the form "TimeOfDay(MM:SS)"
+    // newTimer string of the form "MM:SS" from the timer
+    //String newTimer = timer.substring(10, timer.length - 1);
+
     // Split the input time by colon (e.g., "3:10 PM" -> ["3", "10 PM"])
-    List<String> time = timer.split(":");
+    //List<String> time = newTimer.split(":");
 
     // The last part of the time string is "AM" or "PM"
-    String amPm =
-        time[1].trim().substring(time[1].trim().length - 2); // Get AM/PM
+    String amPm = periodName.toUpperCase();
+        //time[1].trim().substring(time[1].trim().length - 2); // Get AM/PM
 
     // Extract the hour and minute
-    int hour = int.parse(time[0].trim());
-    int min = int.parse(
-        time[1].trim().substring(0, time[1].trim().length - 2)); // Remove AM/PM
+    //int hour = int.parse(time[0].trim());
+    //int min = int.parse(
+    //   time[1].trim().substring(0, time[1].trim().length - 2)); // Remove AM/PM
+    //int min = int.parse(time[1].trim());
+    int hour = hourIn;
+    int min = minIn;
 
     // Adjust the hour based on AM/PM
     if (amPm == "PM" && hour != 12) {
@@ -78,6 +85,8 @@ class TimerButtonWidget extends StatelessWidget {
               });*/
           final TimeOfDay? selectedTime = await showTimePicker(
             context: context,
+            hourLabelText: "Min",
+            minuteLabelText: "Sec",
             initialTime: TimeOfDay(hour: 00, minute: 10),
             //helpText: '',
             initialEntryMode: TimePickerEntryMode.inputOnly, // Input only mode
@@ -95,6 +104,7 @@ class TimerButtonWidget extends StatelessWidget {
                     dayPeriodTextStyle: MyStyles.magic14,
                     dialTextStyle: MyStyles.magic14,
                     helpTextStyle: MyStyles.magic14,
+                    
                   ),
                   materialTapTargetSize: MaterialTapTargetSize.padded,
                   textButtonTheme: TextButtonThemeData(
@@ -123,8 +133,9 @@ class TimerButtonWidget extends StatelessWidget {
           );
 
           if (selectedTime != null) {
-            debugPrint(selectedTime.format(context));
-            _adjustHour(selectedTime.format(context), timerModel);
+            //print("Selected time: ${selectedTime.toString()} ${selectedTime.period.name}");
+            print("Hour: ${selectedTime.hour}, Minute: ${selectedTime.minute}");
+            _adjustHour(selectedTime.hour, selectedTime.minute, selectedTime.period.name, timerModel);
           }
         },
         child: Row(

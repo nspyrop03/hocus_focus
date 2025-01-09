@@ -33,6 +33,7 @@
             android:name="flutterEmbedding"
             android:value="2" />
         
+        <meta-data android:name="flutterEntrypoint" android:value="main"/>
 
         <service 
             android:name="com.ryanheise.audioservice.AudioService"

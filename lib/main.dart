@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hocus_focus/cache.dart';
 import 'package:hocus_focus/global.dart';
@@ -34,6 +35,9 @@ void main() async {
   initializeTimeZones();
   WidgetsFlutterBinding.ensureInitialized();
   await DatabaseHelper().database;
+
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
   runApp(
     MultiProvider(
       providers: [
