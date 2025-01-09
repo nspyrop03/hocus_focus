@@ -3,6 +3,7 @@ library cache;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:hocus_focus/global.dart';
 import 'package:hocus_focus/main.dart';
 import 'package:hocus_focus/sqflite_helper.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,9 @@ class TimerModel extends ChangeNotifier {
         giveReward(_seconds ~/ 2, _seconds ~/ 2);
         stopTimer();
         print("[TimeModel] Timer stopped");
+
+        showClockFinishedNotification(!_isStopwatch);
+
       }
     });
   }
@@ -114,12 +118,12 @@ int getLevel(int exp) {
 int getNormalisedExp(int exp) {
     int level = getLevel(exp);
     int normExp = exp;
-    print("Starting Exp: $exp | Level: $level");
+    //print("Starting Exp: $exp | Level: $level");
     for(int i = level-1; i >= 1; i--) {
         normExp -= getExpForNextLevel(i);
-        print("ExpForNextLevel($i): ${getExpForNextLevel(i)}");
+        //print("ExpForNextLevel($i): ${getExpForNextLevel(i)}");
     }
-    print("Normalised Exp: $normExp");
+    //print("Normalised Exp: $normExp");
 
     return normExp;
 }
