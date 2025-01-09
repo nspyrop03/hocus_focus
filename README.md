@@ -1,16 +1,26 @@
-# hocus_focus
+# HocusFocus
 
-A new Flutter project.
+## α) Εγκατάσταση
 
-## Getting Started
+Εφόσον το `hocus_focus.apk` αρχείο έχει αντιγραφεί στην Android σησκευή, εντοπίστε το μέσω του File Manager της συσκευής σας και κάντε tap για να εγκαταστήσετε την εφαρμογή (θα πρέπει στα Settings να έχετε ενεργοποιήσει την εγκατάσταση εφαρμογών από άγνωστες πηγές). 
 
-This project is a starting point for a Flutter application.
+Επιπλέον, εφόσον επιθυμείτε να λαμβάνετε ειδοποιήσεις(notifications) για διάφορα γεγονότα της συσκευής, χρειάζεται να πάτε στα Settings > Apps της συσκευής, να βρείτε την εφαρμοφή `HocusFocus` και να της δώσετε το δικαίωμα να σας στέλνει ειδοποιήσεις.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## β) Android SDK Version
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Minimum SDK Version: 21
+Target SDK Version: 35
+Tested with SDK Version: 31
+
+## γ) Διαφοροποιήσεις από β' φάση
+
+- Στην `HomePage` δεν χρησιμοποιούμε το SpotifyAPI για να παίζουμε μουσική, αλλά βρίσκουμε τα sources μέσω YouTube
+- Στην `StatisticsPage` δεν παρουσιάζουμε τα tasks/events κάθε μέρα με το διάγραμμα που παρουσιάζουμε στο Figma αλλά με ένα ραβδόγραμμα
+- Μικρές γραφικές αλλαγές
+
+## δ) Βίντεο παρουσίασης
+
+Σύνδεσμος για το ολιγόλεπτο βίντεο παρουσίασης: 
+
+
