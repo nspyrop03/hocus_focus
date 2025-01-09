@@ -4,6 +4,7 @@ import 'package:hocus_focus/styles/styles.dart';
 import 'package:provider/provider.dart';
 import '../cache.dart' as cache;
 
+
 class TimerButtonWidget extends StatelessWidget {
   final bool isTimer;
 
@@ -39,13 +40,63 @@ class TimerButtonWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
         ),
-        onPressed: () {
+        onPressed: () async {
           timerModel.stopTimer();
+          /*
           showDialog(
               context: context,
               builder: (context) {
                 return AddTimerDialog(onAddTimer: _addTimer, isTimer: isTimer);
-              });
+              });*/
+          final TimeOfDay? selectedTime = await showTimePicker(
+            context: context,
+            initialTime: TimeOfDay(hour: 0, minute: 10),
+            //helpText: '',
+            initialEntryMode: TimePickerEntryMode.inputOnly, // Input only mode
+             builder: (context, child) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  timePickerTheme: TimePickerThemeData(
+                    backgroundColor: MyColors.background, 
+                    hourMinuteColor: MyColors.primary, 
+                    hourMinuteTextColor: MyColors.details, 
+                    dialHandColor: MyColors.details, 
+                    dialBackgroundColor: MyColors.details, 
+                    entryModeIconColor: MyColors.details,
+                    hourMinuteTextStyle: MyStyles.magic40,
+                    dayPeriodTextStyle: MyStyles.magic14,
+                    dialTextStyle: MyStyles.magic14,
+                    helpTextStyle: MyStyles.magic14,
+                  ),
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      foregroundColor: MyColors.details, // OK and Cancel buttons color
+                      textStyle: MyStyles.magic14,
+                    ),
+                  ),
+                  colorScheme: ColorScheme.light(
+                    primary: MyColors.details, 
+                    onPrimary: MyColors.secondary,  
+                    onSurface: MyColors.details, 
+                  ),
+                
+                ),
+                child: MediaQuery(
+                  data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true), // Enforces 24-hour format
+                  child: Focus(
+                    focusNode: FocusNode(), // This ensures the keyboard shows
+                    child: child!,
+                  ),
+                ),
+              );
+            },
+          );
+          
+
+          if (selectedTime != null) {
+            debugPrint(selectedTime.format(context));
+          }
         },
         child: Row(
           mainAxisSize: MainAxisSize.max,
