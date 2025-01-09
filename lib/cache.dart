@@ -110,16 +110,32 @@ int getLevel(int exp) {
   return level;
 }
 
+//function to get current level's exp
+int getNormalisedExp(int exp) {
+    int level = getLevel(exp);
+    int normExp = exp;
+    print("Starting Exp: $exp | Level: $level");
+    for(int i = level-1; i >= 1; i--) {
+        normExp -= getExpForNextLevel(i);
+        print("ExpForNextLevel($i): ${getExpForNextLevel(i)}");
+    }
+    print("Normalised Exp: $normExp");
+
+    return normExp;
+}
+
 // function to get percentage of level completion based on exp.
 double getLevelPercentage(int exp) {
   int level = getLevel(exp);
   if (level > 1) {
-    int expForLevel = getExpForNextLevel(level);
-    int expForPrevLevel = getExpForNextLevel(level - 1);
-    print(
-        "Level: $level, exp: $exp, expForLevel: $expForLevel, expForPrevLevel: $expForPrevLevel");
-    final double percentage = (exp - expForPrevLevel) / (expForLevel);
-    print("Percentage: $percentage");
+    int expForNextLevel = getExpForNextLevel(level);
+    //int expForCurrentLevel = getExpForNextLevel(level - 1);
+    //print("Level: $level, exp: ${getNormalisedExp(exp)}, expForNextLevel: ${expForNextLevel}, expForCurrentLevel: $expForCurrentLevel");
+    //final double percentage = (exp - expForPrevLevel) / (expForLevel);
+    //final double percentage = (getNormalisedExp(exp) - expForCurrentLevel) / (expForNextLevel - expForCurrentLevel);
+    final double percentage = getNormalisedExp(exp) / expForNextLevel;
+
+    print("Percentage: $percentage | Exp: $exp | NormalisedExp: ${getNormalisedExp(exp)} | Level: $level");
     return percentage;
   } else {
     return exp / getExpForNextLevel(level);
